@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anuncios - Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background: var(--dark);
+        }
+
+        .anuncios-header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            color: var(--text);
+            padding: 120px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .anuncios-header::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.1) 0%, transparent 70%);
+            top: -150px;
+            left: -150px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .anuncios-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .anuncios-header p {
+            position: relative;
+            z-index: 2;
+            color: var(--text-secondary);
+        }
+
+        .search-section {
+            background: rgba(26, 31, 58, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 30px 20px;
+            box-shadow: 0 2px 10px rgba(0, 242, 255, 0.1);
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .search-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            background: rgba(26, 31, 58, 0.6);
+            color: var(--text);
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0, 242, 255, 0.1);
+        }
+
+        .search-box input::placeholder {
+            color: rgba(224, 230, 237, 0.5);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 12px 25px;
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            color: var(--text);
+        }
+
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: rgba(0, 242, 255, 0.1);
+        }
+
+        .filter-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Secciones */
+        .anuncios-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .anuncios-grid {
+            display: grid;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .grid-elite {
+            grid-template-columns: repeat(auto-fit, minmax(600px, 1fr));
+        }
+
+        .grid-premium {
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        }
+
+        .grid-basico {
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        }
+
+        /* Tarjetas */
+        .anuncio-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .anuncio-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 242, 255, 0.3);
+        }
+
+        /* Elite */
+        .anuncio-card.elite {
+            border: 3px solid #ffd700;
+            box-shadow: 0 8px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .anuncio-card.elite .card-header {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border-bottom: 3px solid #ffd700;
+        }
+
+        /* Premium */
+        .anuncio-card.premium {
+            border: 2px solid var(--secondary);
+            box-shadow: 0 6px 20px rgba(123, 47, 247, 0.2);
+        }
+
+        .anuncio-card.premium .card-header {
+            background: linear-gradient(135deg, rgba(123, 47, 247, 0.1), rgba(123, 47, 247, 0.05));
+            border-bottom: 2px solid var(--secondary);
+        }
+
+        /* Básico */
+        .anuncio-card.basico {
+            border: 1px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .anuncio-card.basico .card-header {
+            background: rgba(26, 31, 58, 0.4);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .card-header {
+            padding: 25px;
+        }
+
+        .card-body {
+            padding: 25px;
+        }
+
+        .anuncio-title {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 15px;
+        }
+
+        .anuncio-card.elite .anuncio-title {
+            font-size: 2.2rem;
+            color: #ffd700;
+        }
+
+        .anuncio-card.premium .anuncio-title {
+            font-size: 2rem;
+            color: var(--secondary);
+        }
+
+        .anuncio-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .category-tag {
+            padding: 6px 15px;
+            background: var(--primary);
+            color: var(--dark);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .price {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .anuncio-card.elite .price {
+            font-size: 2.5rem;
+            color: #ffd700;
+        }
+
+        .description {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+
+        .features {
+            background: rgba(26, 31, 58, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 242, 255, 0.1);
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+        }
+
+        .feature-item::before {
+            content: '✓';
+            color: #26de81;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .media-section {
+            margin-bottom: 20px;
+        }
+
+        .media-grid {
+            display: grid;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .media-grid.two-cols {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .media-grid.one-col {
+            grid-template-columns: 1fr;
+        }
+
+        .media-placeholder {
+            height: 200px;
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.2), rgba(123, 47, 247, 0.2));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+            font-size: 3rem;
+            border: 1px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .anuncio-card.elite .media-placeholder {
+            height: 250px;
+        }
+
+        .media-info {
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .map-container {
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            border: 2px solid rgba(0, 242, 255, 0.3);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 350px;
+            border: none;
+        }
+
+        .anuncio-card.elite .map-container iframe {
+            height: 400px;
+        }
+
+        .contact-section {
+            background: rgba(26, 31, 58, 0.4);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .anuncio-card.elite .contact-section {
+            background: rgba(255, 215, 0, 0.1);
+            border: 2px dashed #ffd700;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 15px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            transition: all 0.3s;
+            min-width: 150px;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+        }
+
+        .btn-call {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .btn-call:hover {
+            background: var(--secondary);
+            transform: scale(1.05);
+        }
+
+        .btn-email {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-email:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 768px) {
+            .anuncios-header {
+                padding: 100px 20px 40px;
+            }
+
+            .anuncios-header h1 {
+                font-size: 2rem;
+            }
+
+            .grid-elite,
+            .grid-premium,
+            .grid-basico {
+                grid-template-columns: 1fr;
+            }
+
+            .search-container {
+                flex-direction: column;
+            }
+
+            .filter-buttons {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .action-btn {
+                width: 100%;
+            }
+
+            .media-grid.two-cols {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html">Trabajos</a></li>
+                <li><a href="anunciate.html" class="active">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="anuncios-header">
+        <h1>📢 Anuncios Clasificados</h1>
+        <p>Encuentra las mejores ofertas de Huancavelica</p>
+    </section>
+
+    <!-- busqueda-->
+    <section class="search-section">
+        <div class="search-container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar anuncios...">
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-plan="all">Todos</button>
+                <button class="filter-btn" data-plan="elite">👑 Elite</button>
+                <button class="filter-btn" data-plan="premium">⭐ Premium</button>
+                <button class="filter-btn" data-plan="basico">📢 Básico</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Anuncios -->
+    <section class="anuncios-section">
+        
+        <!-- ANUNCIOS ELITE -->
+        <div id="eliteSection" class="plan-section">
+            <h2 class="section-title">👑 Anuncios Elite</h2>
+            <div class="anuncios-grid grid-elite">
+                
+                <div class="anuncio-card elite" data-plan="elite">
+                    <div class="card-header">
+                        <img src="assets/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0;">
+                        <h3 class="anuncio-title">Tienda de productos deportivos</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">🛍️ TIENDA DEPORTIVA</span>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            Tienda especializada en artículos deportivos y urbanos: zapatillas de todo tipo, medallas, trofeos, pelotas y más. Calidad, estilo y rendimiento para cada deportista y amante del deporte.
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">Productos 100% originales.</div>
+                            <div class="feature-item">Variedad en modelos deportivos.</div>
+                            <div class="feature-item">Personalización de trofeos y medallas.</div>
+                            <div class="feature-item">Calidad garantizada para cada deportista.</div>
+                            <div class="feature-item">Compra segura y confianza total.</div>
+                        </div>
+
+                        <div class="media-section">
+                            <div class="media-grid two-cols">
+                                <div class="media-placeholder">🎥</div>
+                                <div class="media-placeholder">🎬</div>
+                            </div>
+                            <p class="media-info">🎥 Hasta 2 videos (máx. 50s cada uno) y mas fotos</p>
+                        </div>
+
+                        <div class="map-container">
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1769.9852784286466!2d-74.97255174290962!3d-12.785518077647154!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e0a7e5eb64c81%3A0xfb68684fa8ac0497!2sSebastian%20Barranca%20133%2C%20Huancavelica%2009001!5e0!3m2!1ses!2spe!4v1761187832010!5m2!1ses!2spe" allowfullscreen="" loading="lazy"></iframe>
+                        </div>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📍 Sebastian Barranca 133</div>
+                            <div class="contact-item">⏰ 9:00 AM - 10:00 PM</div>
+                            <div class="contact-item">📱 +51 929 505 174</div>
+                            <div class="contact-item">🌐 Facebook: @Mypaliz</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51929505174" class="action-btn btn-whatsapp" target="_blank">📱 WhatsApp</a>
+                            <a href="tel:+51929505174" class="action-btn btn-call">📞 Llamar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ANUNCIOS PREMIUM -->
+        <div id="premiumSection" class="plan-section">
+            <h2 class="section-title">⭐ Anuncios Premium</h2>
+            <div class="anuncios-grid grid-premium">
+                
+                <div class="anuncio-card premium" data-plan="premium">
+                    <div class="card-header">
+                        <h3 class="anuncio-title">(ejemplo) Chompa de Alpaca Premium</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">👕 ROPA</span>
+                            <div class="price">S/ 120</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            Hermosa chompa tejida a mano con 100% lana de alpaca baby. Diseño exclusivo con guardas andinas. Disponible en varios colores y tallas.
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">100% Lana de Alpaca Baby</div>
+                            <div class="feature-item">Tejido artesanal</div>
+                            <div class="feature-item">Tallas: S, M, L, XL</div>
+                            <div class="feature-item">Envío disponible</div>
+                        </div>
+
+                        <div class="media-section">
+                            <div class="media-grid one-col">
+                                <div class="media-placeholder">🎥</div>
+                            </div>
+                            <p class="media-info">🎥 1 video de menos de 30s</p>
+                        </div>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📍 Plaza de Armas 145</div>
+                            <div class="contact-item">⏰ 9:00 AM - 7:00 PM</div>
+                            <div class="contact-item">📱 +51 999 888 777</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51999888777" class="action-btn btn-whatsapp" target="_blank">📱 WhatsApp</a>
+                            <a href="tel:+51999888777" class="action-btn btn-call">📞 Llamar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anuncio-card premium" data-plan="premium">
+                    <div class="card-header">
+                        <h3 class="anuncio-title">(ejemplo) iPhone 12 Pro 128GB</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">📱 CELULARES</span>
+                            <div class="price">S/ 2,200</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            iPhone 12 Pro 128GB color azul. Estado 10/10, como nuevo. Con caja original y todos los accesorios. Batería al 95%.
+                        </p>
+
+                        <div class="features">
+                            <div class="feature-item">Estado impecable</div>
+                            <div class="feature-item">Caja y accesorios originales</div>
+                            <div class="feature-item">Batería 95%</div>
+                            <div class="feature-item">Libre de operador</div>
+                        </div>
+
+                        <div class="media-section">
+                            <div class="media-grid one-col">
+                                <div class="media-placeholder">📸</div>
+                            </div>
+                            <p class="media-info">📸 Galería de fotos</p>
+                        </div>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📍 Jr. Virrey Toledo 234</div>
+                            <div class="contact-item">⏰ 10:00 AM - 8:00 PM</div>
+                            <div class="contact-item">📱 +51 987 654 321</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51987654321" class="action-btn btn-whatsapp" target="_blank">📱 WhatsApp</a>
+                            <a href="tel:+51987654321" class="action-btn btn-call">📞 Llamar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- ANUNCIOS BÁSICOS -->
+        <div id="basicoSection" class="plan-section">
+            <h2 class="section-title">📢 Anuncios Básicos</h2>
+            <div class="anuncios-grid grid-basico">
+                
+                <div class="anuncio-card basico" data-plan="basico">
+                    <div class="card-header">
+                        <h3 class="anuncio-title">🌐 Creación de Páginas Web a Tu Medida</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">💻 DESARROLLADOR WEB</span>
+                            <div class="price">De S/ 50 para arriba</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            Diseño y creo páginas web personalizadas para que tu idea, negocio o proyecto tenga presencia en internet. Ofrezco diseños funcionales, fáciles de usar y adaptados a dispositivos móviles.
+                        </p>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📱 +51 914 522 586</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51914522586" class="action-btn btn-whatsapp" target="_blank">📱 Contactar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anuncio-card basico" data-plan="basico">
+                    <div class="card-header">
+                        <h3 class="anuncio-title">(ejemplo) Bicicleta Montañera</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">🚴 DEPORTES</span>
+                            <div class="price">S/ 350</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            Bicicleta de montaña aro 26, en buen estado. Lista para usar.
+                        </p>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📱 +51 976 543 210</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51976543210" class="action-btn btn-whatsapp" target="_blank">📱 Contactar</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="anuncio-card basico" data-plan="basico">
+                    <div class="card-header">
+                        <h3 class="anuncio-title">(ejemplo) Libro de Matemáticas</h3>
+                        <div class="anuncio-meta">
+                            <span class="category-tag">📚 LIBROS</span>
+                            <div class="price">S/ 35</div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="description">
+                            Libro de matemáticas para secundaria. En buen estado, pocos rayones.
+                        </p>
+
+                        <div class="contact-section">
+                            <div class="contact-item">📱 +51 965 432 109</div>
+                        </div>
+
+                        <div class="action-buttons">
+                            <a href="https://wa.me/51965432109" class="action-btn btn-whatsapp" target="_blank">📱 Contactar</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="noResults" class="no-results" style="display: none;">
+            <p style="font-size: 3rem; margin-bottom: 20px;">🔍</p>
+            <p>No se encontraron anuncios</p>
+        </div>
+
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Planes</h4>
+                <ul>
+                    <li><a href="anunciate.html">👑 Elite - S/ 20</a></li>
+                    <li><a href="anunciate.html">⭐ Premium - S/ 15</a></li>
+                    <li><a href="anunciate.html">📢 Básico - S/ 10</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            const searchInput = document.getElementById('searchInput');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const allCards = document.querySelectorAll('.anuncio-card');
+            const sections = document.querySelectorAll('.plan-section');
+            const noResults = document.getElementById('noResults');
+            
+            let currentPlan = 'all';
+            
+            function filterAnuncios() {
+                const searchTerm = searchInput.value.toLowerCase().trim();
+                let visibleCount = 0;
+                
+                sections.forEach(section => {
+                    const sectionId = section.id;
+                    
+                    if (currentPlan === 'all') {
+                        section.style.display = 'block';
+                    } else if (sectionId.includes(currentPlan)) {
+                        section.style.display = 'block';
+                    } else {
+                        section.style.display = 'none';
+                    }
+                });
+                
+                allCards.forEach(card => {
+                    const cardPlan = card.getAttribute('data-plan');
+                    const title = card.querySelector('.anuncio-title').textContent.toLowerCase();
+                    const description = card.querySelector('.description').textContent.toLowerCase();
+                    const category = card.querySelector('.category-tag').textContent.toLowerCase();
+                    
+                    const matchesPlan = (currentPlan === 'all' || cardPlan === currentPlan);
+                    const matchesSearch = (searchTerm === '' || 
+                                          title.includes(searchTerm) || 
+                                          description.includes(searchTerm) || 
+                                          category.includes(searchTerm));
+                    
+                    if (matchesPlan && matchesSearch) {
+                        card.style.display = 'block';
+                        visibleCount++;
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+                
+                if (visibleCount === 0) {
+                    noResults.style.display = 'block';
+                } else {
+                    noResults.style.display = 'none';
+                }
+            }
+            
+            searchInput.addEventListener('input', filterAnuncios);
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    currentPlan = this.getAttribute('data-plan');
+                    filterAnuncios();
+                });
+            });
+            
+            console.log('✅ Sistema de búsqueda y filtros cargado correctamente');
+        });
+    </script>
+</body>
+</html>

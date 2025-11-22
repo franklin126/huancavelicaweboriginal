@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anúnciate Aquí - Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .announce-header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            color: var(--text);
+            padding: 120px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .announce-header::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(255, 0, 110, 0.15) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .announce-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .announce-header p {
+            position: relative;
+            z-index: 2;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .cta-link {
+            text-align: center;
+            margin-top: 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .cta-link .btn {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            box-shadow: 0 0 20px rgba(255, 0, 110, 0.4);
+        }
+
+        .cta-link .btn:hover {
+            box-shadow: 0 0 30px rgba(255, 0, 110, 0.6);
+        }
+
+        .benefits {
+            padding: 80px 20px;
+            background: var(--dark-light);
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .benefit-item {
+            text-align: center;
+            padding: 30px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 0, 110, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .benefit-item:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+        }
+
+        .benefit-icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 10px rgba(255, 0, 110, 0.5));
+        }
+
+        .benefit-item h3 {
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+
+        .benefit-item p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .pricing {
+            padding: 80px 20px;
+            background: var(--dark);
+        }
+
+        .pricing h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing h2 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 3rem;
+            font-size: 1.5rem;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(0, 242, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--accent);
+            background: linear-gradient(135deg, rgba(255, 0, 110, 0.05) 0%, rgba(123, 47, 247, 0.05) 100%);
+        }
+
+        .pricing-card.featured:hover {
+            border-color: var(--accent);
+            box-shadow: 0 15px 40px rgba(255, 0, 110, 0.3);
+        }
+
+        .pricing-badge {
+            position: absolute;
+            top: -15px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
+        }
+
+        .pricing-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+
+        .pricing-price {
+            font-size: 3rem;
+            font-weight: bold;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .pricing-features li {
+            padding: 10px 0;
+            color: var(--text-secondary);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+        }
+
+        .pricing-features li:last-child {
+            border-bottom: none;
+        }
+
+        .pricing-features li::before {
+            content: '✓';
+            color: var(--primary);
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .pricing-card .btn {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .announce-header {
+                padding: 100px 20px 40px;
+            }
+
+            .announce-header h1 {
+                font-size: 2rem;
+            }
+
+            .benefits-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pricing h1 {
+                font-size: 2rem;
+            }
+
+            .pricing h2 {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html">Trabajos</a></li>
+                <li><a href="anunciate.html" class="active">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="announce-header">
+        <h1>📢 Anúnciate Aquí</h1>
+        <p>Publica tus productos, servicios o empleos y llega a miles de personas en Huancavelica</p>
+        <div class="cta-link">
+            <a href="anuncios.html" class="btn btn-primary">
+                📢 Ver anuncios publicados
+            </a>
+        </div>
+    </section>
+
+    <!-- beneficios -->
+    <section class="benefits">
+        <div class="container">
+            <h2 class="section-title">¿Por qué anunciarte con nosotros?</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">👥</div>
+                    <h3>Gran Alcance</h3>
+                    <p>Miles de usuarios activos viendo tus anuncios diariamente</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">⚡</div>
+                    <h3>Publicación Rápida</h3>
+                    <p>Tu anuncio visible en menos de 24 horas</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">💰</div>
+                    <h3>Económico</h3>
+                    <p>Planes accesibles para todos los bolsillos</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">📱</div>
+                    <h3>Contacto Directo</h3>
+                    <p>Los interesados te contactan directamente por WhatsApp</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- planes -->
+    <section class="pricing">
+        <div class="container">
+            <h1>COSTO POR ANUNCIO</h1>
+            <h2>30% de descuento hasta el 30 Diciembre</h2>
+            <div class="pricing-grid">
+                <div class="pricing-card featured">
+                    <h3>Básico</h3>
+                    <div class="pricing-price">S/8</div>
+                    <ul class="pricing-features">
+                        <li>1 anuncio activo</li>
+                        <li>Publicación por 7 días</li>
+                        <li>Soporte básico</li>
+                        <li>Descripción + contacto</li>
+                    </ul>
+                    <a class="btn btn-primary" href="https://wa.me/51975552642?text=Hola, quiero publicar mi anuncio con el plan Básico" target="_blank">Comenzar Ahora</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Popular</span>
+                    <h3>Premium</h3>
+                    <div class="pricing-price">S/ 12</div>
+                    <ul class="pricing-features">
+                        <li>2 anuncios activos</li>
+                        <li>Publicación por 11 días</li>
+                        <li>Soporte prioritario</li>
+                        <li>Puede contener 1 video de menos de 30s</li>
+                        <li>Puede poner en su anuncio algunas cosas más</li>
+                    </ul>
+                    <a class="btn btn-primary" href="https://wa.me/51975552642?text=Hola, quiero publicar mi anuncio con el plan Premium" target="_blank">Elegir Premium</a>
+                </div>
+
+                <div class="pricing-card featured">
+                    <span class="pricing-badge">Destacado</span>
+                    <h3>Elite</h3>
+                    <div class="pricing-price">S/16</div>
+                    <ul class="pricing-features">
+                        <li>3 anuncios activos</li>
+                        <li>Publicación por 15 días</li>
+                        <li>Hasta 2 videos (máx. 50s cada uno)</li>
+                        <li>Anuncio destacado en la página principal</li>
+                        <li>Enlace directo a su WhatsApp o red social</li>
+                        <li>Más información como un mapa</li>
+                    </ul>
+                    <a class="btn btn-primary" href="https://wa.me/51975552642?text=Hola, quiero publicar mi anuncio con el plan Elite" target="_blank">Elegir Elite</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza en Huancavelica.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="tienda.html#libros">Libros</a></li>
+                    <li><a href="tienda.html#ropa">Ropa</a></li>
+                    <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                    <li><a href="tienda.html#hogar">Hogar</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 WhatsApp: +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

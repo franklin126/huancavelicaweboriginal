@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa de Negocios - Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        body {
+            padding-top: 0;
+        }
+
+        .negocios-header {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            color: var(--text);
+            padding: 100px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .negocios-header::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(0, 242, 255, 0.15) 0%, transparent 70%);
+            top: -150px;
+            right: -150px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .negocios-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            z-index: 2;
+        }
+
+        .negocios-header p {
+            position: relative;
+            z-index: 2;
+            color: var(--text-secondary);
+        }
+
+        .map-controls {
+            background: rgba(26, 31, 58, 0.8);
+            backdrop-filter: blur(10px);
+            padding: 25px 20px;
+            box-shadow: 0 5px 20px rgba(0, 242, 255, 0.1);
+            border-top: 1px solid rgba(0, 242, 255, 0.2);
+            border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .map-controls .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .search-box-map {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .search-box-map input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid rgba(0, 242, 255, 0.3);
+            background: rgba(26, 31, 58, 0.6);
+            color: var(--text);
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box-map input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.2);
+        }
+
+        .search-box-map input::placeholder {
+            color: rgba(224, 230, 237, 0.5);
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .category-btn {
+            padding: 10px 20px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .category-btn:hover,
+        .category-btn.active {
+            background: var(--primary);
+            color: var(--dark);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.4);
+        }
+
+        .map-container-wrapper {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 0;
+            height: calc(100vh - 400px);
+            min-height: 600px;
+        }
+
+        .negocios-sidebar {
+            background: var(--dark-light);
+            overflow-y: auto;
+            border-right: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .negocios-sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .negocios-sidebar::-webkit-scrollbar-track {
+            background: var(--dark);
+        }
+
+        .negocios-sidebar::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+        }
+
+        .negocio-item {
+            padding: 20px;
+            border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .negocio-item:hover {
+            background: rgba(0, 242, 255, 0.05);
+        }
+
+        .negocio-item.active {
+            background: linear-gradient(135deg, rgba(0, 242, 255, 0.1), rgba(123, 47, 247, 0.1));
+            border-left: 4px solid var(--primary);
+        }
+
+        .negocio-category {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .cat-deportes { background: #ff6b6b; color: white; }
+        .cat-restaurantes { background: #ffa502; color: white; }
+        .cat-tiendas { background: #4834df; color: white; }
+        .cat-servicios { background: #26de81; color: white; }
+        .cat-hoteles { background: #fd79a8; color: white; }
+        .cat-salud { background: #00b894; color: white; }
+
+        .negocio-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--text);
+        }
+
+        .negocio-description {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+        .negocio-info {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 0.9rem;
+        }
+
+        .negocio-info span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+        }
+
+        .negocio-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px 15px;
+            border-radius: 20px;
+            text-decoration: none;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp {
+            background: #25d366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128c7e;
+            transform: scale(1.05);
+        }
+
+        .btn-directions {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-directions:hover {
+            background: var(--primary);
+            color: var(--dark);
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .no-results {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .leaflet-popup-content-wrapper {
+            border-radius: 15px;
+            padding: 0;
+            overflow: hidden;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 242, 255, 0.2);
+        }
+
+        .custom-popup {
+            padding: 15px;
+            min-width: 250px;
+        }
+
+        .custom-popup h3 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+
+        .custom-popup .category-tag {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .custom-popup p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin: 8px 0;
+            line-height: 1.5;
+        }
+
+        .custom-popup .popup-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .custom-popup .action-btn {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 968px) {
+            .map-container-wrapper {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+
+            .negocios-sidebar {
+                height: 400px;
+                border-right: none;
+                border-bottom: 1px solid rgba(0, 242, 255, 0.2);
+            }
+
+            #map {
+                height: 500px;
+            }
+
+            .negocios-header h1 {
+                font-size: 2rem;
+            }
+
+            .map-controls .container {
+                flex-direction: column;
+            }
+
+            .category-filters {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html">Trabajos</a></li>
+                <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html" class="active">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <section class="negocios-header">
+        <h1>🗺️ Mapa de Negocios</h1>
+        <p>Descubre los mejores negocios de Huancavelica en un solo lugar</p>
+    </section>
+
+    <section class="map-controls">
+        <div class="container">
+            <div class="search-box-map">
+                <input type="text" id="searchNegocios" placeholder="🔍 Buscar negocio...">
+            </div>
+            <div class="category-filters">
+                <button class="category-btn active" data-category="all" onclick="filterByCategory('all')">
+                    Todos
+                </button>
+                <button class="category-btn" data-category="deportes" onclick="filterByCategory('deportes')">
+                    🏆 Deportes
+                </button>
+                <button class="category-btn" data-category="restaurantes" onclick="filterByCategory('restaurantes')">
+                    🍽️ Restaurantes
+                </button>
+                <button class="category-btn" data-category="tiendas" onclick="filterByCategory('tiendas')">
+                    🛍️ Tiendas
+                </button>
+                <button class="category-btn" data-category="servicios" onclick="filterByCategory('servicios')">
+                    🔧 Servicios
+                </button>
+                <button class="category-btn" data-category="hoteles" onclick="filterByCategory('hoteles')">
+                    🏨 Hoteles
+                </button>
+                <button class="category-btn" data-category="salud" onclick="filterByCategory('salud')">
+                    ⚕️ Salud
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mapa y Lista -->
+    <div class="map-container-wrapper">
+        <div class="negocios-sidebar" id="negociosList"></div>
+
+        <div id="map"></div>
+    </div>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza en Huancavelica.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="tienda.html#libros">Libros</a></li>
+                    <li><a href="tienda.html#ropa">Ropa</a></li>
+                    <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                    <li><a href="tienda.html#hogar">Hogar</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 WhatsApp: +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+    <script>
+        const negocios = [
+            {
+                id: 1,
+                name: "Max sport",
+                category: "deportes",
+                description: "Tienda especializada en artículos deportivos y urbanos: zapatillas de todo tipo, medallas, trofeos, pelotas y más.",
+                address: "Sebastian Barranca 133",
+                hours: "9:00 AM - 10:00 PM",
+                phone: "+51 929 505 174",
+                lat: -12.78563,
+                lng: -74.97173,
+                icon: "🏆"
+            },
+            {
+                id: 2,
+                name: "(EJEMPLO) Restaurante El Sabor",
+                category: "restaurantes",
+                description: "Comida típica huancavelicana. Los mejores platos de la región.",
+                address: "Plaza de Armas 145",
+                hours: "8:00 AM - 9:00 PM",
+                phone: "+51 999 888 777",
+                lat: -12.7875,
+                lng: -74.9755,
+                icon: "🍽️"
+            }
+        ];
+
+        const categoryColors = {
+            deportes: '#ff6b6b',
+            restaurantes: '#ffa502',
+            tiendas: '#4834df',
+            servicios: '#26de81',
+            hoteles: '#fd79a8',
+            salud: '#00b894'
+        };
+
+        const categoryIcons = {
+            deportes: '🏆',
+            restaurantes: '🍽️',
+            tiendas: '🛍️',
+            servicios: '🔧',
+            hoteles: '🏨',
+            salud: '⚕️'
+        };
+
+        // limites apra el mapa 
+        const huancavelicaBounds = [
+            [-12.8200, -75.0200], 
+            [-12.7500, -74.9400]  
+        ];
+
+        const map = L.map('map', {
+            maxBounds: huancavelicaBounds,
+            maxBoundsViscosity: 1.0,
+            minZoom: 13,
+            maxZoom: 18
+        }).setView([-12.7869, -74.9760], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        let markers = [];
+        let currentFilter = 'all';
+
+        function createCustomIcon(category) {
+            const color = categoryColors[category] || '#00f2ff';
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    background: ${color};
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                    border: 3px solid white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <span style="transform: rotate(45deg); font-size: 20px;">
+                        ${categoryIcons[category] || '📍'}
+                    </span>
+                </div>`,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+        function loadNegocios() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            const negociosList = document.getElementById('negociosList');
+            negociosList.innerHTML = '';
+
+            const filteredNegocios = currentFilter === 'all' 
+                ? negocios 
+                : negocios.filter(n => n.category === currentFilter);
+
+            if (filteredNegocios.length === 0) {
+                negociosList.innerHTML = '<div class="no-results">🔍 No se encontraron negocios en esta categoría</div>';
+                return;
+            }
+
+            filteredNegocios.forEach((negocio) => {
+                const marker = L.marker([negocio.lat, negocio.lng], {
+                    icon: createCustomIcon(negocio.category)
+                }).addTo(map);
+
+                const popupContent = `
+                    <div class="custom-popup">
+                        <span class="category-tag cat-${negocio.category}">
+                            ${categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
+                        </span>
+                        <h3>${negocio.name}</h3>
+                        <p><strong>📍</strong> ${negocio.address}</p>
+                        <p><strong>⏰</strong> ${negocio.hours}</p>
+                        <div class="popup-actions">
+                            <a href="https://wa.me/${negocio.phone.replace(/\s+/g, '')}" target="_blank" class="action-btn btn-whatsapp">
+                                WhatsApp
+                            </a>
+                            <a href="https://www.google.com/maps?q=${negocio.lat},${negocio.lng}" target="_blank" class="action-btn btn-directions">
+                                Cómo llegar
+                            </a>
+                        </div>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+
+                markers.push(marker);
+
+                const negocioItem = document.createElement('div');
+                negocioItem.className = 'negocio-item';
+                negocioItem.setAttribute('data-id', negocio.id);
+                negocioItem.innerHTML = `
+                    <span class="negocio-category cat-${negocio.category}">
+                        ${categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
+                    </span>
+                    <div class="negocio-name">${negocio.name}</div>
+                    <div class="negocio-description">${negocio.description}</div>
+                    <div class="negocio-info">
+                        <span>📍 ${negocio.address}</span>
+                        <span>⏰ ${negocio.hours}</span>
+                        <span>📱 ${negocio.phone}</span>
+                    </div>
+                    <div class="negocio-actions">
+                        <a href="https://wa.me/${negocio.phone.replace(/\s+/g, '')}" target="_blank" class="action-btn btn-whatsapp">
+                            WhatsApp
+                        </a>
+                        <a href="https://www.google.com/maps?q=${negocio.lat},${negocio.lng}" target="_blank" class="action-btn btn-directions">
+                            Cómo llegar
+                        </a>
+                    </div>
+                `;
+
+                negocioItem.addEventListener('click', () => {
+                    document.querySelectorAll('.negocio-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    negocioItem.classList.add('active');
+                    map.setView([negocio.lat, negocio.lng], 17);
+                    marker.openPopup();
+                });
+
+                negociosList.appendChild(negocioItem);
+            });
+
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
+            }
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            loadNegocios();
+        }
+
+        document.getElementById('searchNegocios').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.negocio-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        });
+
+        loadNegocios();
+    </script>
+</body>
+</html>
