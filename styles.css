@@ -30,7 +30,7 @@ body {
 .container {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 1px;
 }
 
 /* Navegación paa toda la pagina */
@@ -445,4 +445,5 @@ footer {
 
 ::-webkit-scrollbar-thumb:hover {
     background: linear-gradient(180deg, var(--secondary), var(--accent));
+
 }
