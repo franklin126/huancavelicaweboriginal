@@ -3,12 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Todo sobre Huancavelica: turismo, anuncios, trabajos, mapa, tienda, noticias, servicios, historia y más.">
     <title>Anúnciate Aquí - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
     <style>
         .announce-header {
-            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
             color: var(--text);
             padding: 120px 20px 60px;
             text-align: center;
@@ -22,7 +21,7 @@
             position: absolute;
             width: 500px;
             height: 500px;
-            background: radial-gradient(circle, rgba(255, 0, 110, 0.15) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
             top: -200px;
             right: -200px;
             animation: pulse 4s ease-in-out infinite;
@@ -31,10 +30,7 @@
         .announce-header h1 {
             font-size: clamp(2rem, 5vw, 3rem);
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--accent), var(--primary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1e293b;
             position: relative;
             z-index: 2;
         }
@@ -42,8 +38,8 @@
         .announce-header p {
             position: relative;
             z-index: 2;
-            color: var(--text-secondary);
-            line-height: 1.8;
+            color: #475569;
+            font-weight: 600;
         }
 
         .cta-link {
@@ -54,17 +50,17 @@
         }
 
         .cta-link .btn {
-            background: linear-gradient(135deg, var(--accent), var(--secondary));
-            box-shadow: 0 0 20px rgba(255, 0, 110, 0.4);
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
         }
 
         .cta-link .btn:hover {
-            box-shadow: 0 0 30px rgba(255, 0, 110, 0.6);
+            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
         }
 
         .benefits {
             padding: 80px 20px;
-            background: var(--dark-light);
+            background: #d1d5db;
         }
 
         .benefits-grid {
@@ -78,54 +74,53 @@
         .benefit-item {
             text-align: center;
             padding: 30px;
-            background: var(--card-bg);
+            background: #f3f4f6;
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            border: 1px solid rgba(255, 0, 110, 0.2);
+            border: 2px solid #9ca3af;
             transition: all 0.3s ease;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         }
 
         .benefit-item:hover {
             transform: translateY(-10px);
-            border-color: var(--accent);
-            box-shadow: 0 10px 30px rgba(255, 0, 110, 0.3);
+            border-color: var(--primary);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3);
         }
 
         .benefit-icon {
             font-size: 3.5rem;
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px rgba(255, 0, 110, 0.5));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
         }
 
         .benefit-item h3 {
-            color: var(--accent);
+            color: #1e293b;
             margin-bottom: 10px;
             font-size: 1.3rem;
         }
 
         .benefit-item p {
-            color: var(--text-secondary);
+            color: #475569;
             line-height: 1.6;
+            font-weight: 600;
         }
 
         .pricing {
             padding: 80px 20px;
-            background: var(--dark);
+            background: #e5e7eb;
         }
 
         .pricing h1 {
             text-align: center;
             font-size: 2.5rem;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: #1e293b;
         }
 
         .pricing h2 {
             text-align: center;
-            color: var(--accent);
+            color: var(--primary);
             margin-bottom: 3rem;
             font-size: 1.5rem;
         }
@@ -139,58 +134,56 @@
         }
 
         .pricing-card {
-            background: var(--card-bg);
+            background: #f3f4f6;
             backdrop-filter: blur(10px);
-            border: 2px solid rgba(0, 242, 255, 0.2);
+            border: 2px solid #9ca3af;
             border-radius: 20px;
             padding: 40px;
             text-align: center;
             transition: all 0.3s ease;
             position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
         }
 
         .pricing-card:hover {
             transform: translateY(-10px);
             border-color: var(--primary);
-            box-shadow: 0 15px 40px rgba(0, 242, 255, 0.3);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
         }
 
         .pricing-card.featured {
-            border-color: var(--accent);
-            background: linear-gradient(135deg, rgba(255, 0, 110, 0.05) 0%, rgba(123, 47, 247, 0.05) 100%);
+            border-color: var(--primary);
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
         }
 
         .pricing-card.featured:hover {
-            border-color: var(--accent);
-            box-shadow: 0 15px 40px rgba(255, 0, 110, 0.3);
+            border-color: var(--primary);
+            box-shadow: 0 15px 40px rgba(59, 130, 246, 0.4);
         }
 
         .pricing-badge {
             position: absolute;
             top: -15px;
             right: 20px;
-            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             padding: 5px 20px;
             border-radius: 20px;
             font-weight: bold;
             font-size: 0.9rem;
-            box-shadow: 0 0 15px rgba(255, 0, 110, 0.5);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.5);
         }
 
         .pricing-card h3 {
             font-size: 1.8rem;
             margin-bottom: 15px;
-            color: var(--text);
+            color: #1e293b;
         }
 
         .pricing-price {
             font-size: 3rem;
             font-weight: bold;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary);
             margin-bottom: 10px;
         }
 
@@ -203,8 +196,9 @@
 
         .pricing-features li {
             padding: 10px 0;
-            color: var(--text-secondary);
-            border-bottom: 1px solid rgba(0, 242, 255, 0.1);
+            color: #475569;
+            border-bottom: 2px solid #9ca3af;
+            font-weight: 600;
         }
 
         .pricing-features li:last-child {
@@ -213,7 +207,7 @@
 
         .pricing-features li::before {
             content: '✓';
-            color: var(--primary);
+            color: #10b981;
             font-weight: bold;
             margin-right: 10px;
             font-size: 1.2rem;
@@ -225,15 +219,41 @@
 
         @media (max-width: 768px) {
             .announce-header {
-                padding: 100px 20px 40px;
+                padding: 100px 8px 40px;
             }
 
             .announce-header h1 {
                 font-size: 2rem;
             }
 
+            .benefits {
+                padding: 40px 8px;
+            }
+
             .benefits-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 10px;
+            }
+
+            .benefit-item {
+                padding: 20px 15px;
+            }
+
+            .benefit-icon {
+                font-size: 2.5rem;
+                margin-bottom: 10px;
+            }
+
+            .benefit-item h3 {
+                font-size: 1.1rem;
+            }
+
+            .benefit-item p {
+                font-size: 0.85rem;
+            }
+
+            .pricing {
+                padding: 40px 8px;
             }
 
             .pricing-grid {
@@ -279,6 +299,46 @@
             </ul>
         </div>
     </nav>
+    <!-- carrucel cel -->
+    <div class="quick-nav-wrapper">
+        <div class="quick-nav-container">
+            <div class="quick-nav-scroll" id="quickNavScroll">
+                <a href="index.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏠</span>
+                    <span>Inicio</span>
+                </a>
+                <a href="tienda.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🛍️</span>
+                    <span>Tienda</span>
+                </a>
+                <a href="trabajos.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">💼</span>
+                    <span>Trabajos</span>
+                </a>
+                <a href="negocios.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏪</span>
+                    <span>Negocios</span>
+                </a>
+                <a href="mapa.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🗺️</span>
+                    <span>Mapa</span>
+                </a>
+                <a href="anunciate.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📣</span>
+                    <span>Anúnciate</span>
+                </a>
+                <a href="contacto.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📞</span>
+                    <span>Contacto</span>
+                </a>
+                <a href="politicas.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📜</span>
+                    <span>Políticas</span>
+                </a>
+            </div>
+            <div class="scroll-hint">Desliza →</div>
+        </div>
+    </div>
 
     <section class="announce-header">
         <h1>📢 Anúnciate Aquí</h1>
@@ -323,11 +383,10 @@
     <section class="pricing">
         <div class="container">
             <h1>COSTO POR ANUNCIO</h1>
-            <h2>30% de descuento hasta el 30 Diciembre</h2>
             <div class="pricing-grid">
                 <div class="pricing-card featured">
                     <h3>Básico</h3>
-                    <div class="pricing-price">S/8</div>
+                    <div class="pricing-price">S/3</div>
                     <ul class="pricing-features">
                         <li>1 anuncio activo</li>
                         <li>Publicación por 7 días</li>
@@ -340,7 +399,7 @@
                 <div class="pricing-card featured">
                     <span class="pricing-badge">Popular</span>
                     <h3>Premium</h3>
-                    <div class="pricing-price">S/ 12</div>
+                    <div class="pricing-price">S/ 7</div>
                     <ul class="pricing-features">
                         <li>2 anuncios activos</li>
                         <li>Publicación por 11 días</li>
@@ -354,7 +413,7 @@
                 <div class="pricing-card featured">
                     <span class="pricing-badge">Destacado</span>
                     <h3>Elite</h3>
-                    <div class="pricing-price">S/16</div>
+                    <div class="pricing-price">S/11</div>
                     <ul class="pricing-features">
                         <li>3 anuncios activos</li>
                         <li>Publicación por 15 días</li>
@@ -411,5 +470,4 @@
 
     <script src="script.js"></script>
 </body>
-
 </html>
