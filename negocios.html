@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Negocios - Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .jobs-header {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            color: var(--text);
+            padding: 120px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jobs-header::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            top: -150px;
+            left: -150px;
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .jobs-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            color: #1e293b;
+            position: relative;
+            z-index: 2;
+        }
+
+        .jobs-header p {
+            position: relative;
+            z-index: 2;
+            color: #475569;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .jobs-header h2 {
+            position: relative;
+            z-index: 2;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .shop-controls {
+            background: rgba(243, 244, 246, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 2px solid #9ca3af;
+            border-bottom: 2px solid #9ca3af;
+            position: relative;
+            z-index: 1;
+        }
+
+        .shop-controls .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.8);
+            border: 2px solid #9ca3af;
+            border-radius: 15px;
+            padding: 10px 15px;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transition: 0.3s ease;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .search-box:hover {
+            box-shadow: 0 5px 15px rgba(59, 130, 246, 0.2);
+            border-color: var(--primary);
+        }
+
+        .search-box input {
+            border: none;
+            outline: none;
+            background: transparent;
+            width: 100%;
+            font-size: 1rem;
+            color: var(--text);
+            padding: 5px;
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .contenedor-del-enlace {
+            text-align: center;
+            margin: 40px 0;
+        }
+
+        .contenedor-del-enlace .apply-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 30px;
+            font-weight: bold;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .contenedor-del-enlace .apply-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .jobs-section {
+            padding: 60px 20px;
+            background: #d1d5db;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: 30px;
+        }
+
+        .job-card {
+            background: #f3f4f6;
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            border: 2px solid #9ca3af;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .job-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.03) 0%, rgba(139, 92, 246, 0.03) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .job-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .job-card:hover::before {
+            opacity: 1;
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .job-badge {
+            background: linear-gradient(135deg, var(--accent), var(--secondary));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .job-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .job-card img {
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #9ca3af;
+            transition: all 0.3s ease;
+        }
+
+        .job-card:hover img {
+            border-color: var(--primary);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .job-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #475569;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .job-description {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+        }
+
+        .job-requirements {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .job-requirements h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .job-requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .job-requirements li {
+            padding: 5px 0;
+            color: #475569;
+            display: flex;
+            align-items: start;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .job-requirements li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .job-requirements iframe {
+            width: 100%;
+            border-radius: 10px;
+            border: 2px solid #9ca3af;
+            margin-top: 15px;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #9ca3af;
+            position: relative;
+            z-index: 1;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .apply-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apply-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        @media (max-width: 768px) {
+            .jobs-header {
+                padding: 100px 8px 40px;
+            }
+
+            .jobs-header h1 {
+                font-size: 2rem;
+            }
+
+            .shop-controls .container {
+                padding: 0 8px;
+            }
+
+            .jobs-section {
+                padding: 40px 8px;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .job-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: stretch;
+            }
+
+            .apply-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html">Trabajos</a></li>
+                <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html" class="active">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- carrucel cel -->
+    <div class="quick-nav-wrapper">
+        <div class="quick-nav-container">
+            <div class="quick-nav-scroll" id="quickNavScroll">
+                <a href="index.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏠</span>
+                    <span>Inicio</span>
+                </a>
+                <a href="tienda.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🛍️</span>
+                    <span>Tienda</span>
+                </a>
+                <a href="trabajos.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">💼</span>
+                    <span>Trabajos</span>
+                </a>
+                <a href="negocios.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏪</span>
+                    <span>Negocios</span>
+                </a>
+                <a href="mapa.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🗺️</span>
+                    <span>Mapa</span>
+                </a>
+                <a href="anunciate.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📣</span>
+                    <span>Anúnciate</span>
+                </a>
+                <a href="contacto.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📞</span>
+                    <span>Contacto</span>
+                </a>
+                <a href="politicas.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📜</span>
+                    <span>Políticas</span>
+                </a>
+            </div>
+            <div class="scroll-hint">Desliza →</div>
+        </div>
+    </div>
+
+    <section class="jobs-header">
+        <h1>🏪 Negocios</h1>
+        <p>Descubre negocios locales de todo tipo en un solo lugar. Encuentra direcciones, <br>
+           contactos y servicios cerca de ti de forma rápida y sencilla.</p>
+        <br>
+        <h2>Si quieres que tu negocio aparezca aquí escríbeme a mi WhatsApp. <br>
+        Gratis hasta el 30 de Enero</h2>
+    </section>
+
+    <section class="shop-controls">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar empleos o servicios...">
+            </div>
+        </div>
+    </section>
+
+    <div class="contenedor-del-enlace">
+        <a href="mapa.html" class="apply-btn">Encuentra negocios cerca de ti</a>
+    </div>
+
+    <!-- principal -->
+    <section class="jobs-section">
+        <div class="container">
+            <!-- negocios -->
+            <div id="empleos" class="tab-content active">
+                <div class="jobs-grid">
+                    <div class="job-card">
+                        <div class="job-header">
+                            <span class="job-badge">Destacado</span>
+                        </div>
+                        <h3 class="job-title">Tienda de productos <br> deportivos</h3>
+                        <div>
+                            <img src="assets/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
+                        </div>
+                        <div class="job-details">
+                            <span class="job-detail">🏆 Productos 100% originales.</span>
+                            <span class="job-detail">👟 Variedad en modelos deportivos.</span>
+                            <span class="job-detail">🎖️ Personalización de trofeos y medallas.</span>
+                        </div>
+                        <p class="job-description">
+                           Tienda especializada en artículos deportivos y urbanos: zapatillas de todo tipo, medallas, trofeos, pelotas y más. Calidad, estilo y rendimiento para cada deportista y amante del deporte.
+                        </p>
+                        <div class="job-requirements">
+                            <h4>Información</h4>
+                            <ul>
+                                <li>⏰ 9am - 10pm</li>
+                                <li>📍 Sebastian Barranca 133</li>
+                            </ul>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2730.7157807886942!2d-74.97426282683374!3d-12.785650356094006!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e0a7e5eb64c81%3A0xfb68684fa8ac0497!2sSebastian%20Barranca%20133%2C%20Huancavelica%2009001!5e1!3m2!1ses-419!2spe!4v1764131466436!5m2!1ses-419!2spe" 
+                            height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        <div class="job-footer">
+                            <a href="https://wa.me/51929505174?text=Hola, me podrías pasar tu catálogo de zapatillas" class="apply-btn" target="_blank">WhatsApp</a>
+                        </div>
+                    </div>
+                    
+                    <div class="job-card">
+                        <div class="job-header">
+                            <span class="job-badge">Destacado</span>
+                        </div>
+                        <h3 class="job-title">Tienda Naturista Nuevo Amanecer  </h3>
+                        <div>
+                            <img src="assets/nuevoamanecer.jpeg" alt="naturista" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
+                        </div>
+                        <div class="job-details">
+                            <span class="job-detail">⭐ Más de 20 años de experiencia en medicina natural.</span>
+                            <span class="job-detail">👨‍⚕️ Personal capacitado y profesional en naturismo.</span>
+                            <span class="job-detail">🌿 Productos originales y de primera calidad, nacionales e importados</span>
+                        </div>
+                        <p class="job-description">
+                           Tienda de medicina natural con amplia trayectoria, personal experto y productos originales de alta calidad a precios accesibles.
+                        </p>
+                        <div class="job-requirements">
+                            <h4>Información</h4>
+                            <ul>
+                                <li>⏰ 8am - 9pm</li>
+                                <li>📍 Jr. Nicolas de pierola 324</li>
+                            </ul>
+                            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2730.7071915739825!2d-74.97808922492673!3d-12.786444487512139!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x910e0a7c4c036667%3A0xcf375e7860d34750!2sJr.%20Nicol%C3%A1s%20de%20Pi%C3%A9rola%20324%2C%20Huancavelica%2009001!5e1!3m2!1ses-419!2spe!4v1764131351997!5m2!1ses-419!2spe" 
+                            height="300" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                        </div>
+                        <div class="job-footer">
+                            <a href="https://wa.me/51999870128?text=Hola" class="apply-btn" target="_blank">WhatsApp</a>
+                            <a href="https://wa.me/51948790501?text=Hola" class="apply-btn" target="_blank">WhatsApp</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza en Huancavelica.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="tienda.html#libros">Libros</a></li>
+                    <li><a href="tienda.html#ropa">Ropa</a></li>
+                    <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                    <li><a href="tienda.html#hogar">Hogar</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 WhatsApp: +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.job-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

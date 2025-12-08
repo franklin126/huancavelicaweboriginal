@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trabajos y Servicios - Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .jobs-header {
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            color: var(--text);
+            padding: 120px 20px 60px;
+            text-align: center;
+            margin-top: 70px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .jobs-header::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            top: -150px;
+            left: -150px;
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .jobs-header h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            margin-bottom: 1rem;
+            color: #1e293b;
+            position: relative;
+            z-index: 2;
+        }
+
+        .jobs-header p {
+            position: relative;
+            z-index: 2;
+            color: #475569;
+            line-height: 1.8;
+            font-weight: 600;
+        }
+
+        .jobs-controls {
+            background: rgba(243, 244, 246, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 25px 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 2px solid #9ca3af;
+            border-bottom: 2px solid #9ca3af;
+            position: relative;
+            z-index: 1;
+        }
+
+        .jobs-controls .container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 12px 20px;
+            border: 2px solid #9ca3af;
+            background: rgba(255, 255, 255, 0.8);
+            color: var(--text);
+            border-radius: 30px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-box input::placeholder {
+            color: #64748b;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 15px;
+        }
+
+        .tab-btn {
+            padding: 12px 30px;
+            border: 2px solid var(--primary);
+            background: transparent;
+            color: var(--primary);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .tab-btn:hover,
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .jobs-section {
+            padding: 60px 20px;
+            background: #d1d5db;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .jobs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* TARJETA COMPACTA */
+        .job-card {
+            background: #f3f4f6;
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #9ca3af;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .job-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Vista compacta - visible por defecto */
+        .job-compact {
+            display: block;
+        }
+
+        /* Vista expandida - oculta por defecto */
+        .job-expanded {
+            display: none;
+            animation: expandDown 0.4s ease;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #9ca3af;
+        }
+
+        .job-card.expanded .job-compact {
+            display: none;
+        }
+
+        .job-card.expanded .job-expanded {
+            display: block;
+        }
+
+        .job-card.expanded {
+            cursor: default;
+        }
+
+        @keyframes expandDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 15px;
+        }
+
+        .job-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+
+        .job-badge {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .job-title {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .job-company {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Descripción corta en vista compacta */
+        .job-description-short {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-weight: 600;
+        }
+
+        /* Botones en vista compacta */
+        .compact-actions {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .expand-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .expand-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .job-salary-compact {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-left: auto;
+        }
+
+        /* Vista expandida - detalles completos */
+        .job-details {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .job-detail {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: #475569;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .job-description {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .job-requirements {
+            margin-bottom: 20px;
+        }
+
+        .job-requirements h4 {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .job-requirements ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .job-requirements li {
+            padding: 5px 0;
+            color: #475569;
+            display: flex;
+            align-items: start;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .job-requirements li::before {
+            content: '✓';
+            color: #10b981;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .job-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 2px solid #9ca3af;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .job-salary {
+            font-size: 1.4rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .apply-btn {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apply-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 20px rgba(59, 130, 246, 0.5);
+        }
+
+        .close-btn {
+            background: transparent;
+            color: #64748b;
+            border: 2px solid #9ca3af;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #9ca3af;
+            color: white;
+        }
+
+        /* SERVICIOS - También con vista compacta */
+        .service-card {
+            text-align: center;
+            background: #f3f4f6;
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 25px;
+            border: 2px solid #9ca3af;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .service-compact {
+            display: block;
+        }
+
+        .service-expanded {
+            display: none;
+            animation: expandDown 0.4s ease;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #9ca3af;
+            text-align: left;
+        }
+
+        .service-card.expanded .service-compact {
+            display: none;
+        }
+
+        .service-card.expanded .service-expanded {
+            display: block;
+        }
+
+        .service-card.expanded {
+            cursor: default;
+        }
+
+        .service-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+
+        .service-title {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+            font-weight: 700;
+        }
+
+        .service-provider {
+            color: var(--primary);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .service-provider a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .service-provider a:hover {
+            color: var(--secondary);
+        }
+
+        .service-description-short {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 15px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            font-weight: 600;
+        }
+
+        .service-description {
+            color: #475569;
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .service-price {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        .rating {
+            color: #ffd700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .listarxd {
+            text-align: left;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .jobs-header {
+                padding: 100px 8px 40px;
+            }
+
+            .jobs-header h1 {
+                font-size: 2rem;
+            }
+
+            .jobs-controls {
+                padding: 20px 8px;
+            }
+
+            .jobs-controls .container {
+                flex-direction: column;
+            }
+
+            .tabs {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .tab-btn {
+                flex: 1;
+                text-align: center;
+                padding: 10px 15px;
+            }
+
+            .jobs-section {
+                padding: 40px 8px;
+            }
+
+            .jobs-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .job-card, .service-card {
+                padding: 20px;
+            }
+
+            .compact-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .expand-btn, .apply-btn, .close-btn {
+                width: 100%;
+            }
+
+            .job-salary-compact {
+                margin-left: 0;
+                text-align: center;
+            }
+
+            .job-footer {
+                flex-direction: column;
+                gap: 10px;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html" class="active">Trabajos</a></li>
+                <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- carrucel cel -->
+    <div class="quick-nav-wrapper">
+        <div class="quick-nav-container">
+            <div class="quick-nav-scroll" id="quickNavScroll">
+                <a href="index.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏠</span>
+                    <span>Inicio</span>
+                </a>
+                <a href="tienda.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🛍️</span>
+                    <span>Tienda</span>
+                </a>
+                <a href="trabajos.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">💼</span>
+                    <span>Trabajos</span>
+                </a>
+                <a href="negocios.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏪</span>
+                    <span>Negocios</span>
+                </a>
+                <a href="mapa.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🗺️</span>
+                    <span>Mapa</span>
+                </a>
+                <a href="anunciate.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📣</span>
+                    <span>Anúnciate</span>
+                </a>
+                <a href="contacto.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📞</span>
+                    <span>Contacto</span>
+                </a>
+                <a href="politicas.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📜</span>
+                    <span>Políticas</span>
+                </a>
+            </div>
+            <div class="scroll-hint">Desliza →</div>
+        </div>
+    </div>
+
+    <section class="jobs-header">
+        <h1>💼 Trabajos y Servicios</h1>
+        <p>¿Necesitas buscar un trabajo? ¿O quieres ofrecer tus habilidades y ganar un ingreso extra? 
+            <br> En esta sección puedes enviarnos la información de tu oferta o servicio y nosotros la publicaremos para que llegue a más personas.</p>
+    </section>
+
+    <section class="jobs-controls">
+        <div class="container">
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar empleos o servicios...">
+            </div>
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab('empleos')">💼 Empleos</button>
+                <button class="tab-btn" onclick="switchTab('servicios')">🔧 Servicios</button>
+            </div>
+        </div>
+    </section>
+
+    <section class="jobs-section">
+        <div class="container">
+            <!-- Empleos -->
+            <div id="empleos" class="tab-content active">
+                <div class="jobs-grid">
+                    <!-- Tarjeta de ejemplo -->
+                    <div class="job-card" onclick="toggleJobCard(this)">
+                        <!-- VISTA COMPACTA -->
+                        <div class="job-compact">
+                            <div class="job-header">
+                                <span class="job-badge">Destacado</span>
+                            </div>
+                            <h3 class="job-title">Empleo de muestra</h3>
+                            <div class="job-company">🏢 TechSolutions Huancavelica</div>
+                            <p class="job-description-short">
+                                Buscamos desarrollador web con conocimientos en HTML, CSS, JavaScript y frameworks modernos. Ambiente dinámico y oportunidades de crecimiento.
+                            </p>
+                            <div class="compact-actions">
+                                <button class="expand-btn" onclick="toggleJobCard(this.closest('.job-card')); event.stopPropagation()">📖 Ver más</button>
+                                <div class="job-salary-compact">S/ 0 - 0</div>
+                            </div>
+                        </div>
+
+                        <!-- VISTA EXPANDIDA -->
+                        <div class="job-expanded">
+                            <div class="job-details">
+                                <span class="job-detail">📍 Huancavelica Centro</span>
+                                <span class="job-detail">⏰ Tiempo Completo</span>
+                            </div>
+                            <p class="job-description">
+                                Estamos buscando un desarrollador web full stack apasionado por la tecnología. 
+                                Trabajarás en proyectos innovadores para clientes locales y nacionales, con un equipo 
+                                joven y dinámico que valora la creatividad y el aprendizaje continuo.
+                            </p>
+                            <div class="job-requirements">
+                                <h4>Requisitos:</h4>
+                                <ul>
+                                    <li>Conocimientos en desarrollo web (HTML, CSS, JavaScript)</li>
+                                    <li>Experiencia mínima de 1 a 2 años</li>
+                                    <li>Proactivo y con ganas de aprender</li>
+                                    <li>Capacidad para trabajar en equipo</li>
+                                    <li>Conocimientos en React o Vue.js (deseable)</li>
+                                </ul>
+                            </div>
+                            <div class="job-footer">
+                                <div class="job-salary">S/ 0 - 0</div>
+                                <div style="display: flex; gap: 10px; flex: 1; justify-content: flex-end; flex-wrap: wrap;">
+                                    <button class="close-btn" onclick="toggleJobCard(this.closest('.job-card')); event.stopPropagation();">✕ Cerrar</button>
+                                    <a href="https://wa.me/51999999999?text=Hola, me interesa el puesto de Desarrollador Web" class="apply-btn" target="_blank" onclick="event.stopPropagation()">📱 WhatsApp</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Servicios -->
+            <div id="servicios" class="tab-content">
+                <div class="jobs-grid">
+                    <div class="service-card" onclick="toggleJobCard(this)">
+                        <!-- VISTA COMPACTA -->
+                        <div class="service-compact">
+                            <h3 class="service-title">Desarrollador Web</h3>
+                            <div class="service-provider">
+                                <a href="https://franklin126.github.io/principal/" target="_blank" onclick="event.stopPropagation()">🏢 WebsGo Huancavelica</a>
+                            </div>
+                            <div class="rating">⭐⭐⭐⭐</div>
+                            <p class="service-description-short">
+                                Diseño y creo páginas web personalizadas para que tu idea, negocio o proyecto tenga presencia en internet.
+                            </p>
+                            <div class="service-price">Desde S/ 150</div>
+                            <div class="compact-actions">
+                                <button class="expand-btn" onclick="toggleJobCard(this.closest('.service-card')); event.stopPropagation()">📖 Ver más</button>
+                                <a href="https://wa.me/51914522586?text=Hola, necesito una pagina web" class="apply-btn" target="_blank" onclick="event.stopPropagation()">📱 WhatsApp</a>
+                            </div>
+                        </div>
+
+                        <!-- VISTA EXPANDIDA -->
+                        <div class="service-expanded">
+                            <p class="service-description">
+                                Diseño y creo páginas web personalizadas para que tu idea, negocio o proyecto tenga presencia en internet.
+                                Trabajo adaptando el diseño a tus necesidades y asegurando que tu sitio sea funcional, atractivo y fácil de usar.
+                            </p>
+                            <h4 style="color: var(--primary); margin: 15px 0 10px 0;">✨ Ideal para:</h4>
+                            <p class="listarxd">🌟 Cumpleaños 🎂</p>
+                            <p class="listarxd">🌟 Aniversarios 💕</p>
+                            <p class="listarxd">🌟 Negocios 💼</p>
+                            <p class="listarxd">🌟 O cualquier ocasión especial 🎁</p>
+                            
+                            <h4 style="color: var(--primary); margin: 15px 0 10px 0;">📋 Incluye:</h4>
+                            <ul style="list-style: none; padding: 0;">
+                                <li style="padding: 5px 0; color: #475569; font-weight: 600;">✓ Diseño personalizado y responsive</li>
+                                <li style="padding: 5px 0; color: #475569; font-weight: 600;">✓ Optimización para móviles</li>
+                                <li style="padding: 5px 0; color: #475569; font-weight: 600;">✓ Integración con redes sociales</li>
+                                <li style="padding: 5px 0; color: #475569; font-weight: 600;">✓ Soporte y asesoramiento</li>
+                            </ul>
+
+                            <div class="job-footer" style="margin-top: 20px;">
+                                <div class="service-price">Desde S/ 150</div>
+                                <div style="display: flex; gap: 10px; flex: 1; justify-content: flex-end; flex-wrap: wrap;">
+                                    <button class="close-btn" onclick="toggleJobCard(this.closest('.service-card')); event.stopPropagation();">✕ Cerrar</button>
+                                    <a href="https://wa.me/51914522586?text=Hola, necesito una pagina web" class="apply-btn" target="_blank" onclick="event.stopPropagation()">📱 Contactar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza en Huancavelica.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="tienda.html#libros">Libros</a></li>
+                    <li><a href="tienda.html#ropa">Ropa</a></li>
+                    <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                    <li><a href="tienda.html#hogar">Hogar</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 WhatsApp: +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Función para expandir/colapsar tarjetas
+        function toggleJobCard(card) {
+            // Si la tarjeta ya está expandida, la cerramos
+            if (card.classList.contains('expanded')) {
+                card.classList.remove('expanded');
+            } else {
+                // Cerramos todas las demás tarjetas primero
+                document.querySelectorAll('.job-card.expanded, .service-card.expanded').forEach(c => {
+                    c.classList.remove('expanded');
+                });
+                // Expandimos la tarjeta clickeada
+                card.classList.add('expanded');
+                
+                // Scroll suave hacia la tarjeta expandida
+                setTimeout(() => {
+                    card.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }, 100);
+            }
+        }
+
+        // Cambio de pestañas
+        function switchTab(tabName) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const buttons = document.querySelectorAll('.tab-btn');
+            
+            // Cerrar todas las tarjetas expandidas al cambiar de pestaña
+            document.querySelectorAll('.job-card.expanded, .service-card.expanded').forEach(card => {
+                card.classList.remove('expanded');
+            });
+            
+            tabs.forEach(tab => tab.classList.remove('active'));
+            buttons.forEach(btn => btn.classList.remove('active'));
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        // Búsqueda
+        const searchInput = document.getElementById('searchInput');
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.job-card, .service-card');
+            
+            cards.forEach(card => {
+                const text = card.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    card.style.display = 'block';
+                    card.style.opacity = '1';
+                } else {
+                    card.style.opacity = '0';
+                    setTimeout(() => {
+                        card.style.display = 'none';
+                    }, 300);
+                }
+            });
+        });
+
+        // Cerrar tarjetas al presionar Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.job-card.expanded, .service-card.expanded').forEach(card => {
+                    card.classList.remove('expanded');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

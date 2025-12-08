@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <meta name="description" content="Mercado Virtual Huancavelica - Compra y vende productos locales, encuentra trabajos y promociona tu negocio">
+    <meta name="theme-color" content="#d1d5db">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Huancavelicaweb</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+            overflow: hidden;
+            padding: 120px 20px 40px;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%);
+            top: -200px;
+            right: -200px;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.1) 0%, transparent 70%);
+            bottom: -150px;
+            left: -150px;
+            animation: pulse 5s ease-in-out infinite;
+        }
+
+        .hero-content {
+            text-align: center;
+            max-width: 900px;
+            z-index: 2;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 4rem);
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            line-height: 1.2;
+            font-weight: 800;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            margin-bottom: 2rem;
+            color: #475569;
+            line-height: 1.8;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .features {
+            padding: 50px 20px 30px;
+            background: #d1d5db;
+            position: relative;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+
+        .feature-card h3 {
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            font-size: 1.4rem;
+        }
+
+        .feature-card p {
+            color: #475569;
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        .feature-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .feature-link:hover {
+            color: #2563eb;
+        }
+
+        .categories {
+            padding: 30px 20px;
+            background: #e5e7eb;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .category-item {
+            text-align: center;
+            cursor: pointer;
+            text-decoration: none;
+            color: #1e293b;
+        }
+
+        .category-item:hover {
+            transform: translateY(-5px);
+        }
+
+        .category-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.15));
+        }
+
+        .category-count {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .how-it-works {
+            padding: 30px 20px 40px;
+            background: #d1d5db;
+        }
+
+        .steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 2rem auto 0;
+        }
+
+        .step {
+            text-align: center;
+        }
+
+        .step:hover {
+            transform: scale(1.03);
+        }
+
+        .step-number {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 0 auto 1rem;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .step h3 {
+            margin-bottom: 0.75rem;
+            color: #1e293b;
+            font-size: 1.3rem;
+        }
+
+        .step p {
+            color: #475569;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .how-it-works-footer {
+            text-align: center;
+            margin-top: 2rem;
+            font-size: 1.1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            color: #475569;
+            line-height: 1.7;
+            font-weight: 600;
+        }
+
+        .final-cta {
+            background: linear-gradient(135deg, #e5e7eb, #d1d5db);
+            padding: 50px 20px;
+            text-align: center;
+            border-top: 2px solid #9ca3af;
+        }
+
+        .final-cta h2 {
+            font-size: clamp(1.75rem, 4vw, 2.5rem);
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .final-cta p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            color: #475569;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .social-btn {
+            background: #f3f4f6;
+            color: #1e293b;
+            padding: 14px 32px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid #9ca3af;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .social-btn:hover {
+            background: #3b82f6;
+            color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+            transform: scale(1.05);
+            border-color: #3b82f6;
+        }
+
+        /* OPTIMIZACIÓN MÓVIL - MÁXIMO APROVECHAMIENTO */
+        @media (max-width: 768px) {
+            .hero {
+                padding: 100px 2px 30px;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                padding: 0 2px;
+            }
+
+            .features {
+                padding: 30px 2px 20px;
+            }
+
+            .categories {
+                padding: 20px 2px;
+            }
+
+            .how-it-works {
+                padding: 20px 2px 30px;
+            }
+
+            .final-cta {
+                padding: 30px 2px;
+            }
+
+            /* QUÉ ENCONTRARÁS - 2 COLUMNAS PEGADAS */
+            .features-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
+
+            /* CATEGORÍAS POPULARES - 2 COLUMNAS PEGADAS */
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 5px;
+            }
+
+            /* CÓMO FUNCIONA - 1 COLUMNA */
+            .steps {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .feature-card h3 {
+                font-size: 1rem;
+            }
+
+            .feature-card p {
+                font-size: 0.85rem;
+                line-height: 1.5;
+            }
+
+            .feature-icon {
+                font-size: 2.5rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .category-icon {
+                font-size: 2rem;
+                margin-bottom: 0.5rem;
+            }
+
+            .category-item h4 {
+                font-size: 0.9rem;
+            }
+
+            .step-number {
+                width: 60px;
+                height: 60px;
+                font-size: 1.75rem;
+                margin-bottom: 0.75rem;
+            }
+
+            .step h3 {
+                font-size: 1.1rem;
+            }
+
+            .step p {
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                margin-bottom: 1rem;
+            }
+
+            .social-links {
+                padding: 0 2px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">🛒 Huancavelicaweb</div>
+            <button class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html" class="active">Inicio</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle">Tienda ▼</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="tienda.html">Ver Todo</a></li>
+                        <li><a href="tienda.html#libros">Libros</a></li>
+                        <li><a href="tienda.html#ropa">Ropa</a></li>
+                        <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                        <li><a href="tienda.html#hogar">Hogar</a></li>
+                    </ul>
+                </li>
+                <li><a href="trabajos.html">Trabajos</a></li>
+                <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                <li><a href="contacto.html">Contacto</a></li>
+                <li><a href="negocios.html">Negocios</a></li>
+                <li><a href="politicas.html">Políticas</a></li>
+            </ul>
+        </div>
+    </nav>
+    <!-- carrucel cel -->
+    <div class="quick-nav-wrapper">
+        <div class="quick-nav-container">
+            <div class="quick-nav-scroll" id="quickNavScroll">
+                <a href="index.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏠</span>
+                    <span>Inicio</span>
+                </a>
+                <a href="tienda.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🛍️</span>
+                    <span>Tienda</span>
+                </a>
+                <a href="trabajos.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">💼</span>
+                    <span>Trabajos</span>
+                </a>
+                <a href="negocios.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🏪</span>
+                    <span>Negocios</span>
+                </a>
+                <a href="mapa.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">🗺️</span>
+                    <span>Mapa</span>
+                </a>
+                <a href="anunciate.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📣</span>
+                    <span>Anúnciate</span>
+                </a>
+                <a href="contacto.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📞</span>
+                    <span>Contacto</span>
+                </a>
+                <a href="politicas.html" class="quick-nav-btn">
+                    <span class="quick-nav-icon">📜</span>
+                    <span>Políticas</span>
+                </a>
+            </div>
+            <div class="scroll-hint">Desliza →</div>
+        </div>
+    </div>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>¡Bienvenido a Tu Mercado Virtual Huancavelica!</h1>
+            <p>Aquí puedes comprar y vender productos locales, encontrar trabajos o promocionar tu negocio, todo en un solo lugar. Nuestra plataforma está diseñada para que la gente de Huancavelica se conecte de manera fácil, rápida y confiable.</p>
+            <div class="cta-buttons">
+                <a href="tienda.html" class="btn btn-primary">Ver Productos</a>
+                <a href="anunciate.html" class="btn btn-secondary">Publicar Anuncio</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">💡 Qué encontrarás</h2>
+            <div class="features-grid">
+                <div class="feature-card card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Productos de todo tipo</h3>
+                    <p>Libros, ropa, electrodomésticos, artículos para el hogar y mucho más.</p>
+                    <a href="tienda.html" class="feature-link">Ver productos →</a>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">💼</div>
+                    <h3>Oportunidades de trabajo</h3>
+                    <p>Servicios de todo tipo y empleos disponibles en tu ciudad.</p>
+                    <a href="trabajos.html" class="feature-link">Ver empleos →</a>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">📢</div>
+                    <h3>Promociona tu negocio</h3>
+                    <p>Espacios para que emprendedores y negocios locales den a conocer sus ofertas.</p>
+                    <a href="anunciate.html" class="feature-link">Anúnciate →</a>
+                </div>
+                <div class="feature-card card">
+                    <div class="feature-icon">🏪</div>
+                    <h3>Negocios locales</h3>
+                    <p>Espacio para publicar negocios locales con su mapa y descripción.</p>
+                    <a href="negocios.html" class="feature-link">Negocios →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="categories">
+        <div class="container">
+            <h2 class="section-title">Categorías Populares</h2>
+            <div class="categories-grid">
+                <a href="tienda.html#libros" class="category-item card">
+                    <div class="category-icon">📚</div>
+                    <h4>Libros</h4>
+                </a>
+                <a href="tienda.html#ropa" class="category-item card">
+                    <div class="category-icon">👕</div>
+                    <h4>Ropa</h4>
+                </a>
+                <a href="tienda.html#electrodomesticos" class="category-item card">
+                    <div class="category-icon">🔌</div>
+                    <h4>Electrodomésticos</h4>
+                </a>
+                <a href="tienda.html#hogar" class="category-item card">
+                    <div class="category-icon">🏠</div>
+                    <h4>Hogar</h4>
+                </a>
+                <a href="trabajos.html" class="category-item card">
+                    <div class="category-icon">💼</div>
+                    <h4>Empleos</h4>
+                </a>
+                <a href="trabajos.html#servicios" class="category-item card">
+                    <div class="category-icon">🔧</div>
+                    <h4>Servicios</h4>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">📲 Simple, directo y confiable</h2>
+            <div class="steps">
+                <div class="step card">
+                    <div class="step-number">1</div>
+                    <h3>Envía tu información</h3>
+                    <p>Manda los detalles de tu producto, empleo o negocio por WhatsApp o nuestro formulario.</p>
+                </div>
+                <div class="step card">
+                    <div class="step-number">2</div>
+                    <h3>Nosotros la publicamos</h3>
+                    <p>Nos encargamos de publicar tu anuncio en la plataforma de forma rápida y profesional.</p>
+                </div>
+                <div class="step card">
+                    <div class="step-number">3</div>
+                    <h3>Te contactan directamente</h3>
+                    <p>Las personas interesadas se pondrán en contacto contigo por WhatsApp o teléfono.</p>
+                </div>
+            </div>
+            <p class="how-it-works-footer">
+                Conectamos a compradores, vendedores, profesionales y emprendedores locales en un solo lugar, ¡sin complicaciones y sin salir de tu ciudad!
+            </p>
+        </div>
+    </section>
+
+    <section class="final-cta">
+        <div class="container">
+            <h2>¡Únete a nuestra comunidad!</h2>
+            <p>Síguenos en nuestras redes sociales y mantente actualizado con las mejores ofertas</p>
+            <div class="social-links">
+                <a href="https://facebook.com/groups/1203106474724463/" class="social-btn">📘 Grupo de Facebook</a>
+                <a href="https://chat.whatsapp.com/Ecc6ZUaBRQZ0bDI6kzRLOw?mode=wwt" class="social-btn">📱 WhatsApp</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-grid">
+            <div class="footer-col">
+                <h4>Huancavelicaweb</h4>
+                <p>Tu mercado virtual de confianza en Huancavelica.</p>
+            </div>
+            <div class="footer-col">
+                <h4>Enlaces Rápidos</h4>
+                <ul>
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="tienda.html">Tienda</a></li>
+                    <li><a href="trabajos.html">Trabajos</a></li>
+                    <li><a href="contacto.html">Contacto</a></li>
+                    <li><a href="negocios.html">Negocios</a></li>
+                    <li><a href="politicas.html">Políticas</a></li>
+                    <li><a href="anunciate.html">Anúnciate Aquí</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Categorías</h4>
+                <ul>
+                    <li><a href="tienda.html#libros">Libros</a></li>
+                    <li><a href="tienda.html#ropa">Ropa</a></li>
+                    <li><a href="tienda.html#electrodomesticos">Electrodomésticos</a></li>
+                    <li><a href="tienda.html#hogar">Hogar</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contacto</h4>
+                <ul>
+                    <li>📱 WhatsApp: +51 975 552 642</li>
+                    <li>📍 Huancavelica, Perú</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Huancavelicaweb. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
