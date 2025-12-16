@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Mapa interactivo de negocios en Huancavelica (HVCA). Encuentra tiendas, heladerías, restaurantes, servicios y emprendimientos locales con ubicación en el mapa. Publica tu negocio gratis.">
+    <meta name="keywords" content="negocios Huancavelica, negocios HVCA, mapa de negocios Huancavelica, tiendas en Huancavelica, emprendimientos Huancavelica, heladerías Huancavelica, restaurantes Huancavelica, Huancavelica web">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa de Negocios - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
@@ -697,7 +699,19 @@
             phone: "+51 948 790 501",
             lat: -12.786445,
             lng: -74.975515,
-            icon: "🪴"
+            icon: "🌿"
+        },
+        {
+            id: 4,
+            name: "Fuente de soda heladeria",
+            category: "tiendas",
+            description: "Ofrecemos helados artesanales, hamburguesas jugosas, jugos naturales, frappés, café capuchino recién preparado. y mucho mas",
+            address: "Jr. Manco capac",
+            hours: "8:00 AM - 9:00 PM",
+            phone: "+51 959 838 397",
+            lat: -12.787807462961435,
+            lng: -74.97250728517992,
+            icon: "🍨"
         }
     ];
 
@@ -803,31 +817,34 @@
         });
     }
 
-    function createCustomIcon(category) {
-        const color = categoryColors[category] || '#3b82f6';
-        return L.divIcon({
-            className: 'custom-marker',
-            html: `<div style="
-                background: ${color};
-                width: 40px;
-                height: 40px;
-                border-radius: 50% 50% 50% 0;
-                transform: rotate(-45deg);
-                border: 3px solid white;
-                box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-            ">
-                <span style="transform: rotate(45deg); font-size: 20px;">
-                    ${categoryIcons[category] || '📍'}
-                </span>
-            </div>`,
-            iconSize: [40, 40],
-            iconAnchor: [20, 40],
-            popupAnchor: [0, -40]
-        });
-    }
+    function createCustomIcon(negocio) {
+    const color = categoryColors[negocio.category] || '#3b82f6';
+    const icon = negocio.icon || categoryIcons[negocio.category] || '📍';
+
+    return L.divIcon({
+        className: 'custom-marker',
+        html: `<div style="
+            background: ${color};
+            width: 40px;
+            height: 40px;
+            border-radius: 50% 50% 50% 0;
+            transform: rotate(-45deg);
+            border: 3px solid white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        ">
+            <span style="transform: rotate(45deg); font-size: 20px;">
+                ${icon}
+            </span>
+        </div>`,
+        iconSize: [40, 40],
+        iconAnchor: [20, 40],
+        popupAnchor: [0, -40]
+    });
+}
+
 
     function loadNegocios() {
         markers.forEach(marker => map.removeLayer(marker));
@@ -847,13 +864,14 @@
 
         filteredNegocios.forEach((negocio) => {
             const marker = L.marker([negocio.lat, negocio.lng], {
-                icon: createCustomIcon(negocio.category)
+                icon: createCustomIcon(negocio)
             }).addTo(map);
+
 
             const popupContent = `
                 <div class="custom-popup">
                     <span class="category-tag cat-${negocio.category}">
-                        ${categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
+                        ${negocio.icon || categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
                     </span>
                     <h3>${negocio.name}</h3>
                     <p><strong>📍</strong> ${negocio.address}</p>
@@ -877,13 +895,13 @@
             negocioItem.setAttribute('data-id', negocio.id);
             negocioItem.innerHTML = `
                 <span class="negocio-category cat-${negocio.category}">
-                    ${categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
+                    ${negocio.icon || categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
                 </span>
                 <div class="negocio-name">${negocio.name}</div>
                 <div class="negocio-description">${negocio.description}</div>
                 <div class="negocio-info">
                     <span>📍 ${negocio.address}</span>
-                    <span>⏰ ${negocio.hours}</span
+                    <span>⏰ ${negocio.hours}</span>
                     <span>📱 ${negocio.phone}</span>
                 </div>
                 <div class="negocio-actions">
