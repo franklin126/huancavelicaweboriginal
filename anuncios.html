@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Plataforma de anuncios clasificados en Huancavelica. Encuentra trabajos, servicios, negocios locales, productos y oportunidades cerca de ti. Publica gratis y conecta rápido.">
+    <meta name="keywords" content="anuncios Huancavelica, trabajos Huancavelica, negocios Huancavelica, clasificados, servicios, empleo, venta de productos">
+    <meta name="author" content="Huancavelicaweb">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Anuncios - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
@@ -522,6 +525,22 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        .media-grid.one-col {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.media-grid.one-col img {
+    width: 100%;
+    max-width: 500px;   /* controla el tamaño en PC */
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    display: block;
+}
+
     </style>
 </head>
 <body>
@@ -624,7 +643,7 @@
                 
                 <div class="anuncio-card elite" data-plan="elite">
                     <div class="card-header">
-                        <img src="assets/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0;">
+                        <img src="negocios/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0;">
                         <h3 class="anuncio-title">Tienda de productos deportivos</h3>
                         <div class="anuncio-meta">
                             <span class="category-tag">🛍️ TIENDA DEPORTIVA</span>
@@ -679,40 +698,32 @@
                 
                 <div class="anuncio-card premium" data-plan="premium">
                     <div class="card-header">
-                        <h3 class="anuncio-title">(ejemplo) Chompa de Alpaca Premium</h3>
-                        <div class="anuncio-meta">
-                            <span class="category-tag">👕 ROPA</span>
-                            <div class="price">S/ 120</div>
-                        </div>
+                        <h3 class="anuncio-title">Clases de Ajedrez – Liga Distrital de Ajedrez de Huancavelica</h3>
                     </div>
                     <div class="card-body">
                         <p class="description">
-                            Hermosa chompa tejida a mano con 100% lana de alpaca baby. Diseño exclusivo con guardas andinas. Disponible en varios colores y tallas.
+                            La Liga Distrital de Ajedrez de Huancavelica ofrece clases de ajedrez para niños desde los 4 años, con enseñanza progresiva en niveles básico, intermedio y avanzado. Las clases están afiliadas a la Federación Deportiva Peruana de Ajedrez y cuentan con horarios flexibles.
                         </p>
 
                         <div class="features">
-                            <div class="feature-item">100% Lana de Alpaca Baby</div>
-                            <div class="feature-item">Tejido artesanal</div>
-                            <div class="feature-item">Tallas: S, M, L, XL</div>
-                            <div class="feature-item">Envío disponible</div>
+                            <div class="feature-item">Horarios: Mañanas o Tardes</div>
+                            <div class="feature-item">Inicio de clases: 5 de enero</div>
+                            <div class="feature-item">Niveles: Básico, Intermedio y Avanzado</div>
                         </div>
 
                         <div class="media-section">
                             <div class="media-grid one-col">
-                                <div class="media-placeholder">🎥</div>
+                                <img src="negocios/ajedres.png" alt="">
                             </div>
-                            <p class="media-info">🎥 1 video de menos de 30s</p>
                         </div>
 
                         <div class="contact-section">
-                            <div class="contact-item">📍 Plaza de Armas 145</div>
-                            <div class="contact-item">⏰ 9:00 AM - 7:00 PM</div>
-                            <div class="contact-item">📱 +51 999 888 777</div>
+                            <div class="contact-item">📍 Centro, San Cristóbal y Ascensión</div>
+                            <div class="contact-item">📱 967983668 – 928291685 – 949588755</div>
                         </div>
 
                         <div class="action-buttons">
-                            <a href="https://wa.me/51999888777" class="action-btn btn-whatsapp" target="_blank">📱 WhatsApp</a>
-                            <a href="tel:+51999888777" class="action-btn btn-call">📞 Llamar</a>
+                            <a href="https://wa.me/51967983668" class="action-btn btn-whatsapp" target="_blank">📱 WhatsApp</a>
                         </div>
                     </div>
                 </div>
