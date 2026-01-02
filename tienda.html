@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Marketplace gratuito en Huancavelica para comprar y vender productos. Publica tus artículos gratis, encuentra ofertas locales y vende de forma rápida y segura.">
+    <meta name="keywords" content="marketplace Huancavelica, tienda online Huancavelica, comprar y vender, productos locales, venta gratis, clasificados">
+    <meta name="author" content="Huancavelicaweb">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
     <title>Tienda - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
@@ -371,6 +374,238 @@
                 gap: 5px;
             }
         }
+
+        /* Boton para publicar los produsctos*/
+        .publish-product-btn {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulseGlow 2s infinite;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+            }
+            50% {
+                transform: scale(1.03);
+                box-shadow: 0 8px 35px rgba(16, 185, 129, 0.7);
+            }
+        }
+
+        .publish-product-btn:hover {
+            transform: scale(1.08) !important;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.8) !important;
+            animation: none;
+        }
+
+        .publish-product-btn .emoji {
+            font-size: 1.4rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* MODAL */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background: #f3f4f6;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            border: 2px solid #9ca3af;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close:hover {
+            background: #ef4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-container h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+            text-align: center;
+        }
+
+        .modal-container .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #9ca3af;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e293b;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #10b981;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group .info-text {
+            display: block;
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        .submit-btn-modal {
+            width: 100%;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn-modal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .publish-product-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .publish-product-btn .emoji {
+                font-size: 1.2rem;
+            }
+
+            .modal-container {
+                padding: 25px 20px;
+                margin: 10px;
+            }
+
+            .modal-container h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .modal-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-container::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .modal-container::-webkit-scrollbar-thumb {
+            background: #10b981;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -448,7 +683,8 @@
     
     <section class="shop-header">
         <h1>🛍️ Tienda Virtual</h1>
-        <p>Encuentra los mejores productos de Huancavelica</p>
+        <p>Encuentra los mejores productos de Huancavelica. Si quieres publicar algún producto, 
+            <br>ya sea ropa u otro objeto, envíanos un mensaje y lo publicamos gratis.</p>
     </section>
 
     <section class="shop-controls">
@@ -456,6 +692,12 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 Buscar productos...">
             </div>
+             
+        <button class="publish-product-btn" onclick="openModal()">
+            <span class="emoji">📦</span>
+            <span>¡Publica tu Producto GRATIS!</span>   
+
+        </button>
             <div class="filter-buttons">
                 <button class="filter-btn active" onclick="filterCategory('all')">Todos</button>
                 <button class="filter-btn" onclick="filterCategory('libros')">📚 Libros</button>
@@ -729,6 +971,59 @@
         </div>
     </section>
 
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModalOnOverlay(event)">
+    <div class="modal-container" onclick="event.stopPropagation()">
+        <button class="modal-close" onclick="closeModal()">×</button>
+        
+        <h2>📦 Publica tu Producto</h2>
+        <p class="subtitle">Completa los datos y te contactaremos por WhatsApp</p>
+        
+        <form id="productForm">
+            <div class="form-group">
+                <label for="productName">Nombre del Producto</label>
+                <input type="text" id="productName" placeholder="Ej: Laptop HP Core i5">
+            </div>
+
+            <div class="form-group">
+                <label for="productCategory">Categoría</label>
+                <select id="productCategory">
+                    <option value="">Selecciona una categoría</option>
+                    <option value="Libros">📚 Libros</option>
+                    <option value="Ropa">👕 Ropa</option>
+                    <option value="Electrodomésticos">🔌 Electrodomésticos</option>
+                    <option value="Hogar">🏠 Hogar</option>
+                    <option value="Entretenimiento">🎮 Entretenimiento</option>
+                    <option value="Pasatiempos">🎨 Pasatiempos</option>
+                    <option value="Otros">📦 Otros</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="productDescription">Descripción</label>
+                <textarea id="productDescription" placeholder="Describe tu producto..."></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="productPrice">Precio</label>
+                <input type="text" id="productPrice" placeholder="Ej: S/ 150">
+            </div>
+
+            <div class="form-group">
+                <label>Foto del Producto</label>
+                <span class="info-text">📸 Envíame la foto por WhatsApp después de enviar el formulario</span>
+            </div>
+
+            <div class="form-group">
+                <label for="productContact">Tu WhatsApp</label>
+                <input type="tel" id="productContact" placeholder="Ej: 987654321">
+            </div>
+
+            <button type="submit" class="submit-btn-modal">
+                📤 Enviar a WhatsApp
+            </button>
+        </form>
+    </div>
+</div>
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -817,6 +1112,62 @@
                     setTimeout(() => card.style.display = 'none', 300);
                 }
             });
+        });
+
+        function openModal() {
+            document.getElementById('modalOverlay').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Cerrar modal al hacer clic en el overlay
+        function closeModalOnOverlay(event) {
+            if (event.target.id === 'modalOverlay') {
+                closeModal();
+            }
+        }
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+
+        // Enviar formulario a WhatsApp
+        document.getElementById('productForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('productName').value.trim();
+            const categoria = document.getElementById('productCategory').value;
+            const descripcion = document.getElementById('productDescription').value.trim();
+            const precio = document.getElementById('productPrice').value.trim();
+            const contacto = document.getElementById('productContact').value.trim();
+            
+            // Construir mensaje
+            let mensaje = '🛒 *NUEVO PRODUCTO PARA PUBLICAR*\n\n';
+            
+            if (nombre) mensaje += `📦 *Producto:* ${nombre}\n`;
+            if (categoria) mensaje += `📁 *Categoría:* ${categoria}\n`;
+            if (descripcion) mensaje += `📝 *Descripción:* ${descripcion}\n`;
+            if (precio) mensaje += `💰 *Precio:* ${precio}\n`;
+            if (contacto) mensaje += `📱 *Mi contacto:* ${contacto}\n`;
+            
+            mensaje += '\n📸 *Te enviaré la foto por este chat*';
+            
+            const numeroWhatsApp = '51975552642';
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            
+            window.open(urlWhatsApp, '_blank');
+            
+            // Limpiar formulario y cerrar modal
+            document.getElementById('productForm').reset();
+            setTimeout(() => closeModal(), 500);
         });
     </script>
 </body>
