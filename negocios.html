@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Descubre negocios locales en Huancavelica. Promociona tu empresa, tienda o emprendimiento y llega a más clientes. Publica tu negocio gratis y gana visibilidad.">
+    <meta name="keywords" content="negocios Huancavelica, empresas Huancavelica, emprendimientos, tiendas locales, servicios, publicidad local">
+    <meta name="author" content="Huancavelicaweb">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Negocios - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
@@ -345,6 +348,237 @@
                 text-align: center;
             }
         }
+
+        /* BOTÓN PARA PUBLICAR NEGOCIO */
+.publish-business-btn {
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 14px 30px;
+    border-radius: 30px;
+    font-size: 1.05rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    animation: pulseGlowBusiness 2s infinite;
+}
+
+@keyframes pulseGlowBusiness {
+    0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 6px 25px rgba(16, 185, 129, 0.5);
+    }
+    50% {
+        transform: scale(1.03);
+        box-shadow: 0 8px 35px rgba(16, 185, 129, 0.7);
+    }
+}
+
+.publish-business-btn:hover {
+    transform: scale(1.08) !important;
+    box-shadow: 0 10px 40px rgba(16, 185, 129, 0.8) !important;
+    animation: none;
+}
+
+.publish-business-btn .emoji {
+    font-size: 1.4rem;
+    animation: bounceBusiness 1s infinite;
+}
+
+@keyframes bounceBusiness {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+}
+
+/* MODAL */
+.modal-overlay-business {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 999;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-overlay-business.active {
+    display: flex;
+}
+
+.modal-container-business {
+    background: #f3f4f6;
+    border-radius: 20px;
+    padding: 40px;
+    max-width: 600px;
+    width: 100%;
+    border: 2px solid #9ca3af;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalSlideInBusiness 0.3s ease;
+}
+
+@keyframes modalSlideInBusiness {
+    from {
+        opacity: 0;
+        transform: translateY(-50px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.modal-close-business {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: transparent;
+    border: 2px solid #ef4444;
+    color: #ef4444;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close-business:hover {
+    background: #ef4444;
+    color: white;
+    transform: rotate(90deg);
+}
+
+.modal-container-business h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    color: #1e293b;
+    text-align: center;
+}
+
+.modal-container-business .subtitle {
+    text-align: center;
+    color: #64748b;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.form-group-business {
+    margin-bottom: 20px;
+}
+
+.form-group-business label {
+    display: block;
+    margin-bottom: 8px;
+    color: #1e293b;
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.form-group-business input,
+.form-group-business textarea,
+.form-group-business select {
+    width: 100%;
+    padding: 12px 18px;
+    border: 2px solid #9ca3af;
+    background: rgba(255, 255, 255, 0.9);
+    color: #1e293b;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.form-group-business input:focus,
+.form-group-business textarea:focus,
+.form-group-business select:focus {
+    outline: none;
+    border-color: #10b981;
+    box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+}
+
+.form-group-business textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.form-group-business .info-text {
+    display: block;
+    margin-top: 5px;
+    color: #64748b;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+.submit-btn-modal-business {
+    width: 100%;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1.1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 10px;
+}
+
+.submit-btn-modal-business:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+}
+
+.modal-container-business::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-container-business::-webkit-scrollbar-track {
+    background: #e5e7eb;
+    border-radius: 10px;
+}
+
+.modal-container-business::-webkit-scrollbar-thumb {
+    background: #10b981;
+    border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+    .publish-business-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.95rem;
+    }
+
+    .publish-business-btn .emoji {
+        font-size: 1.2rem;
+    }
+
+    .modal-container-business {
+        padding: 25px 20px;
+        margin: 10px;
+    }
+
+    .modal-container-business h2 {
+        font-size: 1.5rem;
+    }
+}
     </style>
 </head>
 <body>
@@ -423,19 +657,23 @@
            contactos y servicios cerca de ti de forma rápida y sencilla.</p>
         <br>
         <h2>Si quieres que tu negocio aparezca aquí escríbeme a mi WhatsApp. <br>
-        Gratis hasta el 30 de Enero</h2>
+        Gratis hasta el 1 de Marzo</h2>
     </section>
 
     <section class="shop-controls">
         <div class="container">
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="🔍 Buscar empleos o servicios...">
+                <input type="text" id="searchInput" placeholder="🔍 Buscar negocios...">
             </div>
+            <button class="publish-business-btn" onclick="openModalBusiness()">
+    <span class="emoji">🏪</span>
+    <span>¡Publica tu Negocio GRATIS!</span>
+</button>
         </div>
     </section>
 
     <div class="contenedor-del-enlace">
-        <a href="mapa.html" class="apply-btn">Encuentra negocios cerca de ti</a>
+        <a href="mapa.html" class="apply-btn">🔎 Clic para ver mapa 📍</a>
     </div>
 
     <!-- principal -->
@@ -450,7 +688,7 @@
                         </div>
                         <h3 class="job-title">Tienda de productos <br> deportivos</h3>
                         <div>
-                            <img src="assets/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
+                            <img src="negocios/max.jpeg" alt="maxsport" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
                         </div>
                         <div class="job-details">
                             <span class="job-detail">🏆 Productos 100% originales.</span>
@@ -480,7 +718,7 @@
                         </div>
                         <h3 class="job-title">Tienda Naturista Nuevo Amanecer  </h3>
                         <div>
-                            <img src="assets/nuevoamanecer.jpeg" alt="naturista" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
+                            <img src="negocios/nuevoamanecer.jpeg" alt="naturista" width="100%" style="max-width: 300px; display: block; margin: 0 auto;">
                         </div>
                         <div class="job-details">
                             <span class="job-detail">⭐ Más de 20 años de experiencia en medicina natural.</span>
@@ -508,7 +746,60 @@
             </div>
         </div>
     </section>
+    <!-- MODAL PARA PUBLICAR NEGOCIO -->
+<div class="modal-overlay-business" id="modalOverlayBusiness" onclick="closeModalOnOverlayBusiness(event)">
+    <div class="modal-container-business" onclick="event.stopPropagation()">
+        <button class="modal-close-business" onclick="closeModalBusiness()">×</button>
+        
+        <h2>🏪 Publica tu Negocio</h2>
+        <p class="subtitle">Completa los datos y te contactaremos por WhatsApp</p>
+        
+        <form id="businessForm">
+            <div class="form-group-business">
+                <label for="businessName">Nombre del Negocio</label>
+                <input type="text" id="businessName" placeholder="Ej: Tienda de Ropa Elegante">
+            </div>
 
+            <div class="form-group-business">
+                <label>Logo del Negocio</label>
+                <span class="info-text">📸 Envíame el logo por WhatsApp después de enviar el formulario</span>
+            </div>
+
+            <div class="form-group-business">
+                <label for="businessDescription">Descripción</label>
+                <textarea id="businessDescription" placeholder="Describe tu negocio..."></textarea>
+            </div>
+
+            <div class="form-group-business">
+                <label for="businessAddress">Dirección</label>
+                <input type="text" id="businessAddress" placeholder="Ej: Jr. Virrey Toledo 123">
+            </div>
+
+            <div class="form-group-business">
+                <label for="businessHours">Horario</label>
+                <input type="text" id="businessHours" placeholder="Ej: Lunes a Sábado 9am - 8pm">
+            </div>
+
+            <div class="form-group-business">
+                <label for="businessPhone">Teléfono / WhatsApp</label>
+                <input type="tel" id="businessPhone" placeholder="Ej: 987654321">
+            </div>
+
+            <div class="form-group-business">
+                <label for="businessMap">¿Quieres aparecer también en el mapa?</label>
+                <select id="businessMap">
+                    <option value="">Selecciona una opción</option>
+                    <option value="Sí">✅ Sí, quiero aparecer en el mapa</option>
+                    <option value="No">❌ No, solo en la lista de negocios</option>
+                </select>
+            </div>
+
+            <button type="submit" class="submit-btn-modal-business">
+                📤 Enviar a WhatsApp
+            </button>
+        </form>
+    </div>
+</div>
     <footer>
         <div class="footer-grid">
             <div class="footer-col">
@@ -568,6 +859,59 @@
                     }, 300);
                 }
             });
+        });
+
+        function openModalBusiness() {
+            document.getElementById('modalOverlayBusiness').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModalBusiness() {
+            document.getElementById('modalOverlayBusiness').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function closeModalOnOverlayBusiness(event) {
+            if (event.target.id === 'modalOverlayBusiness') {
+                closeModalBusiness();
+            }
+        }
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('modalOverlayBusiness').classList.contains('active')) {
+                closeModalBusiness();
+            }
+        });
+
+        // Enviar formulario a WhatsApp
+        document.getElementById('businessForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const nombre = document.getElementById('businessName').value.trim();
+            const descripcion = document.getElementById('businessDescription').value.trim();
+            const direccion = document.getElementById('businessAddress').value.trim();
+            const horario = document.getElementById('businessHours').value.trim();
+            const telefono = document.getElementById('businessPhone').value.trim();
+            const mapa = document.getElementById('businessMap').value;
+            
+            let mensaje = '🏪 *NUEVO NEGOCIO PARA PUBLICAR*\n\n';
+            
+            if (nombre) mensaje += `📌 *Nombre:* ${nombre}\n`;
+            mensaje += `📸 *Logo:* Te lo enviaré por este chat\n`;
+            if (descripcion) mensaje += `📝 *Descripción:* ${descripcion}\n`;
+            if (direccion) mensaje += `📍 *Dirección:* ${direccion}\n`;
+            if (horario) mensaje += `⏰ *Horario:* ${horario}\n`;
+            if (telefono) mensaje += `📱 *Teléfono/WhatsApp:* ${telefono}\n`;
+            if (mapa) mensaje += `🗺️ *Aparecer en el mapa:* ${mapa}\n`;
+            
+            const numeroWhatsApp = '51975552642';
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            
+            window.open(urlWhatsApp, '_blank');
+            
+            document.getElementById('businessForm').reset();
+            setTimeout(() => closeModalBusiness(), 500);
         });
     </script>
 </body>
