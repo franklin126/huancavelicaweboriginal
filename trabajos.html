@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="description" content="Encuentra trabajos y servicios en Huancavelica. Ofertas de empleo local como ayudante de cocina, carpintero, técnico y más. Publica tu trabajo o servicio gratis.">
+    <meta name="keywords" content="trabajos Huancavelica, empleos Huancavelica, servicios Huancavelica, ayudante de cocina, carpintero, técnicos, empleo local">
+    <meta name="author" content="Huancavelicaweb">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trabajos y Servicios - Huancavelicaweb</title>
     <link rel="stylesheet" href="styles.css">
@@ -551,6 +554,246 @@
                 align-items: stretch;
             }
         }
+
+        .publish-job-btn {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 14px 30px;
+            border-radius: 30px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            animation: pulseGlowJob 2s infinite;
+        }
+
+        @keyframes pulseGlowJob {
+            0%, 100% {
+                transform: scale(1);
+                box-shadow: 0 6px 25px rgba(59, 130, 246, 0.5);
+            }
+            50% {
+                transform: scale(1.03);
+                box-shadow: 0 8px 35px rgba(59, 130, 246, 0.7);
+            }
+        }
+
+        .publish-job-btn:hover {
+            transform: scale(1.08) !important;
+            box-shadow: 0 10px 40px rgba(59, 130, 246, 0.8) !important;
+            animation: none;
+        }
+
+        .publish-job-btn .emoji {
+            font-size: 1.4rem;
+            animation: bounceJob 1s infinite;
+        }
+
+        @keyframes bounceJob {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* MODAL */
+        .modal-overlay-job {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-overlay-job.active {
+            display: flex;
+        }
+
+        .modal-container-job {
+            background: #f3f4f6;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            border: 2px solid #9ca3af;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlideInJob 0.3s ease;
+        }
+
+        @keyframes modalSlideInJob {
+            from {
+                opacity: 0;
+                transform: translateY(-50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .modal-close-job {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: transparent;
+            border: 2px solid #ef4444;
+            color: #ef4444;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-close-job:hover {
+            background: #ef4444;
+            color: white;
+            transform: rotate(90deg);
+        }
+
+        .modal-container-job h2 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #1e293b;
+            text-align: center;
+        }
+
+        .modal-container-job .subtitle {
+            text-align: center;
+            color: #64748b;
+            margin-bottom: 30px;
+            font-weight: 600;
+        }
+
+        .form-group-job {
+            margin-bottom: 20px;
+        }
+
+        .form-group-job label {
+            display: block;
+            margin-bottom: 8px;
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .form-group-job input,
+        .form-group-job textarea,
+        .form-group-job select {
+            width: 100%;
+            padding: 12px 18px;
+            border: 2px solid #9ca3af;
+            background: rgba(255, 255, 255, 0.9);
+            color: #1e293b;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        .form-group-job input:focus,
+        .form-group-job textarea:focus,
+        .form-group-job select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group-job textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group-job .info-text {
+            display: block;
+            margin-top: 5px;
+            color: #64748b;
+            font-size: 0.85rem;
+            font-style: italic;
+        }
+
+        /* Campo de requisitos - se muestra solo si elige "Empleo" */
+        .requisitos-field {
+            display: none;
+        }
+
+        .requisitos-field.active {
+            display: block;
+        }
+
+        .submit-btn-modal-job {
+            width: 100%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        .submit-btn-modal-job:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .publish-job-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 12px 20px;
+                font-size: 0.95rem;
+            }
+
+            .publish-job-btn .emoji {
+                font-size: 1.2rem;
+            }
+
+            .modal-container-job {
+                padding: 25px 20px;
+                margin: 10px;
+            }
+
+            .modal-container-job h2 {
+                font-size: 1.5rem;
+            }
+        }
+
+        .modal-container-job::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .modal-container-job::-webkit-scrollbar-track {
+            background: #e5e7eb;
+            border-radius: 10px;
+        }
+
+        .modal-container-job::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -625,8 +868,8 @@
 
     <section class="jobs-header">
         <h1>💼 Trabajos y Servicios</h1>
-        <p>¿Necesitas buscar un trabajo? ¿O quieres ofrecer tus habilidades y ganar un ingreso extra? 
-            <br> En esta sección puedes enviarnos la información de tu oferta o servicio y nosotros la publicaremos para que llegue a más personas.</p>
+        <p>¿Necesitas buscar un trabajo o quieres ofrecer tus habilidades para ganar un ingreso extra?
+            <br> En esta sección puedes enviarnos tu oferta o servicio y lo publicamos gratis, para que llegue a más personas.</p>
     </section>
 
     <section class="jobs-controls">
@@ -634,6 +877,12 @@
             <div class="search-box">
                 <input type="text" id="searchInput" placeholder="🔍 Buscar empleos o servicios...">
             </div>
+
+            <button class="publish-job-btn" onclick="openModalJob()">
+            <span class="emoji">💼</span>
+            <span>¡Publica tu Trabajo o Servicio GRATIS!</span>
+            </button>
+
             <div class="tabs">
                 <button class="tab-btn active" onclick="switchTab('empleos')">💼 Empleos</button>
                 <button class="tab-btn" onclick="switchTab('servicios')">🔧 Servicios</button>
@@ -753,6 +1002,60 @@
     </section>
 
     <footer>
+        <div class="modal-overlay-job" id="modalOverlayJob" onclick="closeModalOnOverlayJob(event)">
+    <div class="modal-container-job" onclick="event.stopPropagation()">
+        <button class="modal-close-job" onclick="closeModalJob()">×</button>
+        
+        <h2>💼 Publica tu Trabajo o Servicio</h2>
+        <p class="subtitle">Completa los datos y te contactaremos por WhatsApp</p>
+        
+        <form id="jobForm">
+            <div class="form-group-job">
+                <label for="jobType">Tipo</label>
+                <select id="jobType" onchange="toggleRequisitos()">
+                    <option value="">Selecciona el tipo</option>
+                    <option value="Empleo">💼 Empleo</option>
+                    <option value="Servicio">🔧 Servicio</option>
+                </select>
+            </div>
+
+            <div class="form-group-job">
+                <label for="jobTitle">Título</label>
+                <input type="text" id="jobTitle" placeholder="Ej: Desarrollador Web, Electricista, etc.">
+            </div>
+
+            <div class="form-group-job">
+                <label for="jobDescription">Descripción</label>
+                <textarea id="jobDescription" placeholder="Describe el trabajo o servicio..."></textarea>
+            </div>
+
+            <div class="form-group-job requisitos-field" id="requisitosField">
+                <label for="jobRequisitos">Requisitos</label>
+                <textarea id="jobRequisitos" placeholder="Experiencia, habilidades, estudios, etc."></textarea>
+            
+            </div>
+
+            <div class="form-group-job">
+                <label for="jobLocation">Ubicación</label>
+                <input type="text" id="jobLocation" placeholder="Ej: Huancavelica Centro">
+            </div>
+
+            <div class="form-group-job">
+                <label for="jobSalary">Salario/Precio</label>
+                <input type="text" id="jobSalary" placeholder="Ej: S/ 1200 o Desde S/ 50">
+            </div>
+
+            <div class="form-group-job">
+                <label for="jobContact">Tu WhatsApp</label>
+                <input type="tel" id="jobContact" placeholder="Ej: 987654321">
+            </div>
+
+            <button type="submit" class="submit-btn-modal-job">
+                📤 Enviar a WhatsApp
+            </button>
+        </form>
+    </div>
+</div>
         <div class="footer-grid">
             <div class="footer-col">
                 <h4>Huancavelicaweb</h4>
@@ -857,6 +1160,77 @@
                 document.querySelectorAll('.job-card.expanded, .service-card.expanded').forEach(card => {
                     card.classList.remove('expanded');
                 });
+            }
+        });
+
+        function openModalJob() {
+            document.getElementById('modalOverlayJob').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Cerrar modal
+        function closeModalJob() {
+            document.getElementById('modalOverlayJob').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        // Cerrar modal al hacer clic en el overlay
+        function closeModalOnOverlayJob(event) {
+            if (event.target.id === 'modalOverlayJob') {
+                closeModalJob();
+            }
+        }
+
+        // Mostrar/ocultar campo de requisitos según el tipo
+        function toggleRequisitos() {
+            const tipo = document.getElementById('jobType').value;
+            const requisitosField = document.getElementById('requisitosField');
+            
+            if (tipo === 'Empleo') {
+                requisitosField.classList.add('active');
+            } else {
+                requisitosField.classList.remove('active');
+            }
+        }
+
+        // Enviar formulario a WhatsApp
+        document.getElementById('jobForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const tipo = document.getElementById('jobType').value;
+            const titulo = document.getElementById('jobTitle').value.trim();
+            const descripcion = document.getElementById('jobDescription').value.trim();
+            const requisitos = document.getElementById('jobRequisitos').value.trim();
+            const ubicacion = document.getElementById('jobLocation').value.trim();
+            const salario = document.getElementById('jobSalary').value.trim();
+            const contacto = document.getElementById('jobContact').value.trim();
+            
+            // Construir mensaje
+            let mensaje = '💼 *NUEVO TRABAJO/SERVICIO PARA PUBLICAR*\n\n';
+            
+            if (tipo) mensaje += `📋 *Tipo:* ${tipo}\n`;
+            if (titulo) mensaje += `✨ *Título:* ${titulo}\n`;
+            if (descripcion) mensaje += `📝 *Descripción:* ${descripcion}\n`;
+            if (requisitos && tipo === 'Empleo') mensaje += `📌 *Requisitos:* ${requisitos}\n`;
+            if (ubicacion) mensaje += `📍 *Ubicación:* ${ubicacion}\n`;
+            if (salario) mensaje += `💰 *Salario/Precio:* ${salario}\n`;
+            if (contacto) mensaje += `📱 *Mi contacto:* ${contacto}\n`;
+            
+            const numeroWhatsApp = '51975552642';
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+            
+            window.open(urlWhatsApp, '_blank');
+            
+            // Limpiar formulario y cerrar modal
+            document.getElementById('jobForm').reset();
+            document.getElementById('requisitosField').classList.remove('active');
+            setTimeout(() => closeModalJob(), 500);
+        });
+
+        // Cerrar modal con ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && document.getElementById('modalOverlayJob').classList.contains('active')) {
+                closeModalJob();
             }
         });
     </script>
