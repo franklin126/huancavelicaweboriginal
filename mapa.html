@@ -6,11 +6,193 @@
     <meta name="keywords" content="negocios Huancavelica, negocios HVCA, mapa de negocios Huancavelica, tiendas en Huancavelica, emprendimientos Huancavelica, heladerías Huancavelica, restaurantes Huancavelica, Huancavelica web">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mapa de Negocios - Huancavelicaweb</title>
-    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
     <style>
+        :root {
+            --primary: #3b82f6;
+            --secondary: #8b5cf6;
+            --accent: #10b981;
+            --dark: #e5e7eb;
+            --dark-light: #d1d5db;
+            --text: #1e293b;
+            --text-secondary: #64748b;
+            --card-bg: #f3f4f6;
+            --shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+            --shadow-hover: 0 4px 12px rgba(0, 0, 0, 0.15);
+            --border-color: #9ca3af;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--dark-light);
+            overflow-x: hidden;
             padding-top: 0;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        nav {
+            background: rgba(243, 244, 246, 0.98);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--border-color);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+            color: var(--secondary);
+        }
+
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .menu-toggle span {
+            width: 28px;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(8px, -8px);
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            position: relative;
+            transition: all 0.3s ease;
+            padding: 5px 0;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--primary);
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(243, 244, 246, 0.98);
+            backdrop-filter: blur(20px);
+            list-style: none;
+            padding: 10px 0;
+            min-width: 200px;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            box-shadow: var(--shadow);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu li {
+            padding: 0;
+        }
+
+        .dropdown-menu a {
+            color: var(--text);
+            padding: 10px 20px;
+            display: block;
+            transition: all 0.3s ease;
+        }
+
+        .dropdown-menu a:hover {
+            background: var(--dark-light);
+            color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .dropdown-menu a::after {
+            display: none;
         }
 
         .negocios-header {
@@ -57,7 +239,7 @@
             border-top: 2px solid #9ca3af;
             border-bottom: 2px solid #9ca3af;
             position: relative;
-            z-index: 1;
+            z-index: 999;
         }
 
         .map-controls .container {
@@ -100,6 +282,10 @@
             flex-wrap: wrap;
         }
 
+        .category-filter-item {
+            position: relative;
+        }
+
         .category-btn {
             padding: 10px 20px;
             border: 2px solid var(--primary);
@@ -109,6 +295,9 @@
             transition: all 0.3s ease;
             color: var(--primary);
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
 
         .category-btn:hover,
@@ -116,6 +305,53 @@
             background: var(--primary);
             color: white;
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .subcategory-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: rgba(243, 244, 246, 0.98);
+            backdrop-filter: blur(20px);
+            list-style: none;
+            padding: 10px 0;
+            min-width: 220px;
+            border-radius: 12px;
+            border: 2px solid var(--border-color);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            z-index: 2000;
+            margin-top: 5px;
+        }
+
+        .category-filter-item:hover .subcategory-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .subcategory-item {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: var(--text);
+            font-weight: 500;
+            display: block;
+        }
+
+        .subcategory-item:hover {
+            background: var(--dark-light);
+            color: var(--primary);
+            padding-left: 25px;
+        }
+
+        .subcategory-item.active {
+            background: rgba(59, 130, 246, 0.1);
+            color: var(--primary);
+            font-weight: 700;
         }
 
         .map-container-wrapper {
@@ -177,6 +413,9 @@
         .cat-servicios { background: #26de81; color: white; }
         .cat-hoteles { background: #fd79a8; color: white; }
         .cat-salud { background: #00b894; color: white; }
+        .cat-educacion { background: #6c5ce7; color: white; }
+        .cat-hogar { background: #e17055; color: white; }
+        .cat-oficinas { background: #0984e3; color: white; }
 
         .negocio-name {
             font-size: 1.2rem;
@@ -309,7 +548,6 @@
             font-size: 0.85rem;
         }
 
-        /* SISTEMA DE BLOQUEO */
         .map-overlay {
             position: absolute;
             top: 0;
@@ -445,6 +683,160 @@
             50% { transform: translateY(-10px); }
         }
 
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.3;
+            }
+            50% {
+                transform: scale(1.05);
+                opacity: 0.5;
+            }
+        }
+
+        footer {
+            background: var(--card-bg);
+            padding: 40px 20px 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1400px;
+            margin: 0 auto 2rem;
+        }
+
+        .footer-col h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            font-size: 1.2rem;
+        }
+
+        .footer-col p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-col a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .footer-col a:hover {
+            color: var(--primary);
+            padding-left: 5px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 2px solid var(--border-color);
+            color: var(--text-secondary);
+        }
+
+        .quick-nav-wrapper {
+            display: none; 
+            position: relative;
+            margin-top: 70px;
+            left: 0;
+            right: 0;
+            z-index: 999;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid #9ca3af;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            padding: 10px 0;
+        }
+
+        .quick-nav-container {
+            position: relative;
+        }
+
+        .quick-nav-scroll {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            scroll-behavior: smooth;
+            padding: 0 10px;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .quick-nav-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .quick-nav-btn {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: white;
+            border: 2px solid var(--primary);
+            border-radius: 25px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .quick-nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .quick-nav-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+
+        .quick-nav-icon {
+            font-size: 1.1rem;
+        }
+
+        .scroll-hint {
+            position: absolute;
+            right: 5px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.8));
+            padding: 8px 12px;
+            border-radius: 20px 0 0 20px;
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+            pointer-events: none;
+            animation: pulseScroll 2s infinite;
+        }
+
+        @keyframes pulseScroll {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .quick-nav-scroll.scrolled ~ .scroll-hint {
+            display: none;
+        }
+
         @media (max-width: 968px) {
             .map-container-wrapper {
                 grid-template-columns: 1fr;
@@ -490,6 +882,104 @@
                 padding: 12px 20px;
                 font-size: 1rem;
             }
+
+            .subcategory-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                margin-top: 10px;
+                display: none;
+            }
+
+            .category-filter-item.show-subcategories .subcategory-menu {
+                display: block;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .quick-nav-wrapper {
+                display: block;
+            }
+
+            .container {
+                padding: 0 2px;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                left: 0;
+                width: 100%;
+                background: rgba(243, 244, 246, 0.98);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                padding: 15px;
+                gap: 1rem;
+                transform: translateX(-100%);
+                transition: transform 0.3s ease;
+                border-top: 2px solid var(--border-color);
+                max-height: calc(100vh - 70px);
+                overflow-y: auto;
+            }
+
+            .nav-links.active {
+                transform: translateX(0);
+            }
+
+            .dropdown-menu {
+                position: static;
+                opacity: 1;
+                visibility: visible;
+                transform: none;
+                box-shadow: none;
+                background: var(--dark-light);
+                margin-top: 10px;
+                display: none;
+            }
+
+            .dropdown.active .dropdown-menu {
+                display: block;
+            }
+
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav-container {
+                padding: 1rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--dark-light);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--secondary);
         }
     </style>
 </head>
@@ -522,7 +1012,7 @@
             </ul>
         </div>
     </nav>
-    <!-- carrucel cel -->
+
     <div class="quick-nav-wrapper">
         <div class="quick-nav-container">
             <div class="quick-nav-scroll" id="quickNavScroll">
@@ -539,7 +1029,7 @@
                     <span>Trabajos</span>
                 </a>
                 <a href="negocios.html" class="quick-nav-btn">
-                    <span class="quick-nav-icon">🏪</span>
+                    <span class="quick-nav-icon">🪙</span>
                     <span>Negocios</span>
                 </a>
                 <a href="mapa.html" class="quick-nav-btn">
@@ -577,47 +1067,104 @@
                 <button class="category-btn active" data-category="all" onclick="filterByCategory('all')">
                     Todos
                 </button>
-                <button class="category-btn" data-category="deportes" onclick="filterByCategory('deportes')">
-                    🏆 Deportes
-                </button>
-                <button class="category-btn" data-category="restaurantes" onclick="filterByCategory('restaurantes')">
-                    🍽️ Restaurantes
-                </button>
-                <button class="category-btn" data-category="tiendas" onclick="filterByCategory('tiendas')">
-                    🛍️ Tiendas
-                </button>
-                <button class="category-btn" data-category="servicios" onclick="filterByCategory('servicios')">
-                    🔧 Servicios
-                </button>
-                <button class="category-btn" data-category="hoteles" onclick="filterByCategory('hoteles')">
-                    🏨 Hoteles
-                </button>
-                <button class="category-btn" data-category="salud" onclick="filterByCategory('salud')">
-                    ⚕️ Salud
-                </button>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="deportes" onclick="filterByCategory('deportes')">
+                        🏆 Deportes
+                    </button>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="restaurantes" onclick="toggleSubcategories(this)">
+                        🍽️ Restaurantes ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('restaurantes', 'pollerias')">Pollerías</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('restaurantes', 'chifas')">Chifas</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('restaurantes', 'rapida')">Comida rápida</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="tiendas" onclick="toggleSubcategories(this)">
+                        🛍️ Tiendas ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('tiendas', 'ropa')">Tiendas de ropa</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('tiendas', 'calzado')">Tiendas de calzado</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('tiendas', 'tecnologia')">Tiendas de tecnología</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('tiendas', 'abarrotes')">Tiendas de abarrotes</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="servicios" onclick="toggleSubcategories(this)">
+                        🔧 Servicios ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('servicios', 'tecnicos')">Servicios técnicos</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('servicios', 'mecanico')">Taller mecánico</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('servicios', 'impresion')">Impresión y cabinas</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="hoteles" onclick="filterByCategory('hoteles')">
+                        🏨 Hoteles
+                    </button>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="salud" onclick="toggleSubcategories(this)">
+                        ⚕️ Salud ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('salud', 'consultorios')">Consultorios de salud</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('salud', 'veterinarias')">Veterinarias</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="educacion" onclick="toggleSubcategories(this)">
+                        🎓 Educación ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('educacion', 'colegios')">Colegios</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('educacion', 'academias')">Academias</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('educacion', 'librerias')">Librerías</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="hogar" onclick="toggleSubcategories(this)">
+                        🏠 Hogar ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('hogar', 'ferreterias')">Ferreterías</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('hogar', 'mueblerias')">Mueblerías</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('hogar', 'construccion')">Construcción y materiales</div>
+                    </div>
+                </div>
+                <div class="category-filter-item">
+                    <button class="category-btn" data-category="oficinas" onclick="toggleSubcategories(this)">
+                        💼 Oficinas ▼
+                    </button>
+                    <div class="subcategory-menu">
+                        <div class="subcategory-item" onclick="filterBySubcategory('oficinas', 'imprentas')">Imprentas</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('oficinas', 'juridicos')">Estudios jurídicos</div>
+                        <div class="subcategory-item" onclick="filterBySubcategory('oficinas', 'notarias')">Notarías</div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Mapa y Lista -->
     <div class="map-container-wrapper">
         <div class="negocios-sidebar" id="negociosList"></div>
 
         <div id="map">
-            <!-- Overlay de bloqueo -->
             <div class="map-overlay" id="mapOverlay">
                 <div class="unlock-button">
                     🔓 Desbloquear Mapa para Interactuar
                 </div>
             </div>
-            <!-- Botón de candado -->
             <button class="lock-btn" id="lockBtn">🔒</button>
-            <!-- Mensaje de confirmación -->
             <div class="lock-message" id="lockMessage">✓ Mapa bloqueado</div>
         </div>
     </div>
 
-    <!-- Botón flotante -->
     <button class="scroll-to-map-btn" id="scrollToMapBtn">🗺️</button>
 
     <footer>
@@ -661,222 +1208,346 @@
     </footer>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="script.js"></script>
-    <script src="mapa-script.js"></script>
     <script>
-        const negocios = [
-        {
-            id: 1,
-            name: "Max sport",
-            category: "deportes",
-            description: "Tienda especializada en artículos deportivos y urbanos: zapatillas de todo tipo, medallas, trofeos, pelotas y más.",
-            address: "Sebastian Barranca 133",
-            hours: "9:00 AM - 10:00 PM",
-            phone: "+51 929 505 174",
-            lat: -12.78563,
-            lng: -74.97173,
-            icon: "🏆"
-        },
-        {
-            id: 2,
-            name: "Acuario sayumi",
-            category: "tiendas",
-            description: "Realizamos instalaciones de peceras al gusto del cliente y tenemos variedad de peces ornamentales",
-            address: "Ernesto Morales con Jorge Anccasi",
-            hours: "9:00 AM - 8:00 PM",
-            phone: "+51 934 592 332",
-            lat: -12.783489,
-            lng: -74.983522,
-            icon: "🐟"
-        },
-        {
-            id: 3,
-            name: "Tienda naturista: Nuevo amanecer",
-            category: "tiendas",
-            description: "Venta de productos naturales para la salud.",
-            address: "Jr. Nicolas de pierola 324",
-            hours: "8:00 AM - 9:00 PM",
-            phone: "+51 948 790 501",
-            lat: -12.786445,
-            lng: -74.975515,
-            icon: "🌿"
-        },
-        {
-            id: 4,
-            name: "Fuente de soda heladeria",
-            category: "tiendas",
-            description: "Ofrecemos helados artesanales, hamburguesas jugosas, jugos naturales, frappés, café capuchino recién preparado. y mucho mas",
-            address: "Jr. Manco capac",
-            hours: "8:00 AM - 9:00 PM",
-            phone: "+51 959 838 397",
-            lat: -12.787807462961435,
-            lng: -74.97250728517992,
-            icon: "🍨"
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        if (menuToggle && navLinks) {
+            menuToggle.addEventListener('click', () => {
+                menuToggle.classList.toggle('active');
+                navLinks.classList.toggle('active');
+                
+                if (navLinks.classList.contains('active')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = '';
+                }
+            });
+
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    if (link.classList.contains('dropdown-toggle')) {
+                        e.preventDefault();
+                        return;
+                    }
+
+                    menuToggle.classList.remove('active');
+                    navLinks.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (navLinks.classList.contains('active')) {
+                    if (!navLinks.contains(e.target) && !menuToggle.contains(e.target)) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                        document.body.style.overflow = '';
+                    }
+                }
+            });
         }
-    ];
 
-    const categoryColors = {
-        deportes: '#ff6b6b',
-        restaurantes: '#ffa502',
-        tiendas: '#4834df',
-        servicios: '#26de81',
-        hoteles: '#fd79a8',
-        salud: '#00b894'
-    };
+        if (window.innerWidth <= 768) {
+            document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const dropdown = toggle.closest('.dropdown');
+                    dropdown.classList.toggle('active');
+                });
+            });
+        }
 
-    const categoryIcons = {
-        deportes: '🏆',
-        restaurantes: '🍽️',
-        tiendas: '🛍️',
-        servicios: '🔧',
-        hoteles: '🏨',
-        salud: '⚕️'
-    };
-
-    const huancavelicaBounds = [
-        [-12.8200, -75.0200], 
-        [-12.7500, -74.9400]  
-    ];
-
-    const map = L.map('map', {
-        maxBounds: huancavelicaBounds,
-        maxBoundsViscosity: 1.0,
-        minZoom: 13,
-        maxZoom: 18
-    }).setView([-12.7869, -74.9760], 15);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '© OpenStreetMap contributors',
-        maxZoom: 19
-    }).addTo(map);
-
-    let markers = [];
-    let currentFilter = 'all';
-    let isMapLocked = true;
-
-    const mapOverlay = document.getElementById('mapOverlay');
-    const lockBtn = document.getElementById('lockBtn');
-    const lockMessage = document.getElementById('lockMessage');
-    const scrollToMapBtn = document.getElementById('scrollToMapBtn');
-    const mapElement = document.getElementById('map');
-
-    function lockMap() {
-        isMapLocked = true;
-        mapOverlay.classList.remove('hidden');
-        lockBtn.classList.remove('visible');
-        map.dragging.disable();
-        map.touchZoom.disable();
-        map.doubleClickZoom.disable();
-        map.scrollWheelZoom.disable();
-        map.boxZoom.disable();
-        map.keyboard.disable();
-        if (map.tap) map.tap.disable();
-    }
-
-    function unlockMap() {
-        isMapLocked = false;
-        mapOverlay.classList.add('hidden');
-        lockBtn.classList.add('visible');
-        map.dragging.enable();
-        map.touchZoom.enable();
-        map.doubleClickZoom.enable();
-        map.scrollWheelZoom.enable();
-        map.boxZoom.enable();
-        map.keyboard.enable();
-        if (map.tap) map.tap.enable();
-    }
-
-    lockMap();
-
-    mapOverlay.addEventListener('click', () => {
-        unlockMap();
-    });
-
-    lockBtn.addEventListener('click', () => {
-        lockMap();
-        lockMessage.classList.add('show');
-        setTimeout(() => {
-            lockMessage.classList.remove('show');
-        }, 2000);
-    });
-
-    scrollToMapBtn.addEventListener('click', () => {
-        mapElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
-
-    if (window.innerWidth <= 968) {
-        window.addEventListener('scroll', () => {
-            const mapPosition = mapElement.getBoundingClientRect();
-            const windowHeight = window.innerHeight;
+        const quickNavScroll = document.getElementById('quickNavScroll');
+        if (quickNavScroll) {
+            let hasScrolled = false;
             
-            if (mapPosition.top > windowHeight || mapPosition.bottom < 0) {
-                scrollToMapBtn.classList.add('visible');
-            } else {
-                scrollToMapBtn.classList.remove('visible');
-            }
-        });
-    }
-
-    function createCustomIcon(negocio) {
-    const color = categoryColors[negocio.category] || '#3b82f6';
-    const icon = negocio.icon || categoryIcons[negocio.category] || '📍';
-
-    return L.divIcon({
-        className: 'custom-marker',
-        html: `<div style="
-            background: ${color};
-            width: 40px;
-            height: 40px;
-            border-radius: 50% 50% 50% 0;
-            transform: rotate(-45deg);
-            border: 3px solid white;
-            box-shadow: 0 3px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        ">
-            <span style="transform: rotate(45deg); font-size: 20px;">
-                ${icon}
-            </span>
-        </div>`,
-        iconSize: [40, 40],
-        iconAnchor: [20, 40],
-        popupAnchor: [0, -40]
-    });
-}
-
-
-    function loadNegocios() {
-        markers.forEach(marker => map.removeLayer(marker));
-        markers = [];
-
-        const negociosList = document.getElementById('negociosList');
-        negociosList.innerHTML = '';
-
-        const filteredNegocios = currentFilter === 'all' 
-            ? negocios 
-            : negocios.filter(n => n.category === currentFilter);
-
-        if (filteredNegocios.length === 0) {
-            negociosList.innerHTML = '<div class="no-results">🔍 No se encontraron negocios en esta categoría</div>';
-            return;
+            quickNavScroll.addEventListener('scroll', () => {
+                if (!hasScrolled && quickNavScroll.scrollLeft > 10) {
+                    hasScrolled = true;
+                    quickNavScroll.classList.add('scrolled');
+                }
+            });
         }
 
-        filteredNegocios.forEach((negocio) => {
-            const marker = L.marker([negocio.lat, negocio.lng], {
-                icon: createCustomIcon(negocio)
-            }).addTo(map);
+        document.addEventListener('DOMContentLoaded', () => {
+            const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+            const quickNavButtons = document.querySelectorAll('.quick-nav-btn');
+            
+            quickNavButtons.forEach(btn => {
+                btn.classList.remove('active');
+                const btnHref = btn.getAttribute('href');
+                
+                if (btnHref === currentPage || (currentPage === '' && btnHref === 'index.html')) {
+                    btn.classList.add('active');
+                    
+                    setTimeout(() => {
+                        btn.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            inline: 'center', 
+                            block: 'nearest' 
+                        });
+                    }, 100);
+                }
+            });
+        });
 
+        const negocios = [
+            {
+                id: 1,
+                name: "Max sport",
+                category: "deportes",
+                subcategory: null,
+                description: "Tienda especializada en artículos deportivos y urbanos: zapatillas de todo tipo, medallas, trofeos, pelotas y más.",
+                address: "Sebastian Barranca 133",
+                hours: "9:00 AM - 10:00 PM",
+                phone: "+51 929 505 174",
+                lat: -12.78563,
+                lng: -74.97173,
+                icon: "🏆"
+            },
+            {
+                id: 2,
+                name: "Acuario sayumi",
+                category: "servicios",
+                subcategory: null,
+                description: "Realizamos instalaciones de peceras al gusto del cliente y tenemos variedad de peces ornamentales",
+                address: "Ernesto Morales con Jorge Anccasi",
+                hours: "9:00 AM - 8:00 PM",
+                phone: "+51 934 592 332",
+                lat: -12.783489,
+                lng: -74.983522,
+                icon: "🐟"
+            },
+            {
+                id: 3,
+                name: "Tienda naturista: Nuevo amanecer",
+                category: "tiendas",
+                subcategory: null,
+                description: "Venta de productos naturales para la salud.",
+                address: "Jr. Nicolas de pierola 324",
+                hours: "8:00 AM - 9:00 PM",
+                phone: "+51 948 790 501",
+                lat: -12.786445,
+                lng: -74.975515,
+                icon: "🌿"
+            },
+            {
+                id: 4,
+                name: "Fuente de soda heladeria",
+                category: "restaurantes",
+                subcategory: "rapida",
+                description: "Ofrecemos helados artesanales, hamburguesas jugosas, jugos naturales, frappés, café capuchino recién preparado. y mucho mas",
+                address: "Jr. Manco capac",
+                hours: "8:00 AM - 9:00 PM",
+                phone: "+51 959 838 397",
+                lat: -12.787807462961435,
+                lng: -74.97250728517992,
+                icon: "🍨"
+            }
+        ];
 
-            const popupContent = `
-                <div class="custom-popup">
-                    <span class="category-tag cat-${negocio.category}">
+        const categoryColors = {
+            deportes: '#ff6b6b',
+            restaurantes: '#ffa502',
+            tiendas: '#4834df',
+            servicios: '#26de81',
+            hoteles: '#fd79a8',
+            salud: '#00b894',
+            educacion: '#6c5ce7',
+            hogar: '#e17055',
+            oficinas: '#0984e3'
+        };
+
+        const categoryIcons = {
+            deportes: '🏆',
+            restaurantes: '🍽️',
+            tiendas: '🛍️',
+            servicios: '🔧',
+            hoteles: '🏨',
+            salud: '⚕️',
+            educacion: '🎓',
+            hogar: '🏠',
+            oficinas: '💼'
+        };
+
+        const huancavelicaBounds = [
+            [-12.8200, -75.0200], 
+            [-12.7500, -74.9400]  
+        ];
+
+        const map = L.map('map', {
+            maxBounds: huancavelicaBounds,
+            maxBoundsViscosity: 1.0,
+            minZoom: 13,
+            maxZoom: 18
+        }).setView([-12.7869, -74.9760], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors',
+            maxZoom: 19
+        }).addTo(map);
+
+        let markers = [];
+        let currentFilter = 'all';
+        let currentSubcategory = null;
+        let isMapLocked = true;
+
+        const mapOverlay = document.getElementById('mapOverlay');
+        const lockBtn = document.getElementById('lockBtn');
+        const lockMessage = document.getElementById('lockMessage');
+        const scrollToMapBtn = document.getElementById('scrollToMapBtn');
+        const mapElement = document.getElementById('map');
+
+        function lockMap() {
+            isMapLocked = true;
+            mapOverlay.classList.remove('hidden');
+            lockBtn.classList.remove('visible');
+            map.dragging.disable();
+            map.touchZoom.disable();
+            map.doubleClickZoom.disable();
+            map.scrollWheelZoom.disable();
+            map.boxZoom.disable();
+            map.keyboard.disable();
+            if (map.tap) map.tap.disable();
+        }
+
+        function unlockMap() {
+            isMapLocked = false;
+            mapOverlay.classList.add('hidden');
+            lockBtn.classList.add('visible');
+            map.dragging.enable();
+            map.touchZoom.enable();
+            map.doubleClickZoom.enable();
+            map.scrollWheelZoom.enable();
+            map.boxZoom.enable();
+            map.keyboard.enable();
+            if (map.tap) map.tap.enable();
+        }
+
+        lockMap();
+
+        mapOverlay.addEventListener('click', () => {
+            unlockMap();
+        });
+
+        lockBtn.addEventListener('click', () => {
+            lockMap();
+            lockMessage.classList.add('show');
+            setTimeout(() => {
+                lockMessage.classList.remove('show');
+            }, 2000);
+        });
+
+        scrollToMapBtn.addEventListener('click', () => {
+            mapElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+
+        if (window.innerWidth <= 968) {
+            window.addEventListener('scroll', () => {
+                const mapPosition = mapElement.getBoundingClientRect();
+                const windowHeight = window.innerHeight;
+                
+                if (mapPosition.top > windowHeight || mapPosition.bottom < 0) {
+                    scrollToMapBtn.classList.add('visible');
+                } else {
+                    scrollToMapBtn.classList.remove('visible');
+                }
+            });
+        }
+
+        function createCustomIcon(negocio) {
+            const color = categoryColors[negocio.category] || '#3b82f6';
+            const icon = negocio.icon || categoryIcons[negocio.category] || '📍';
+
+            return L.divIcon({
+                className: 'custom-marker',
+                html: `<div style="
+                    background: ${color};
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50% 50% 50% 0;
+                    transform: rotate(-45deg);
+                    border: 3px solid white;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                ">
+                    <span style="transform: rotate(45deg); font-size: 20px;">
+                        ${icon}
+                    </span>
+                </div>`,
+                iconSize: [40, 40],
+                iconAnchor: [20, 40],
+                popupAnchor: [0, -40]
+            });
+        }
+
+        function loadNegocios() {
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+
+            const negociosList = document.getElementById('negociosList');
+            negociosList.innerHTML = '';
+
+            let filteredNegocios = negocios;
+            
+            if (currentFilter !== 'all') {
+                filteredNegocios = negocios.filter(n => n.category === currentFilter);
+                
+                if (currentSubcategory) {
+                    filteredNegocios = filteredNegocios.filter(n => n.subcategory === currentSubcategory);
+                }
+            }
+
+            if (filteredNegocios.length === 0) {
+                negociosList.innerHTML = '<div class="no-results">🔍 No se encontraron negocios en esta categoría</div>';
+                return;
+            }
+
+            filteredNegocios.forEach((negocio) => {
+                const marker = L.marker([negocio.lat, negocio.lng], {
+                    icon: createCustomIcon(negocio)
+                }).addTo(map);
+
+                const popupContent = `
+                    <div class="custom-popup">
+                        <span class="category-tag cat-${negocio.category}">
+                            ${negocio.icon || categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
+                        </span>
+                        <h3>${negocio.name}</h3>
+                        <p><strong>📍</strong> ${negocio.address}</p>
+                        <p><strong>⏰</strong> ${negocio.hours}</p>
+                        <div class="popup-actions">
+                            <a href="https://wa.me/${negocio.phone.replace(/\s+/g, '')}" target="_blank" class="action-btn btn-whatsapp">
+                                WhatsApp
+                            </a>
+                            <a href="https://www.google.com/maps?q=${negocio.lat},${negocio.lng}" target="_blank" class="action-btn btn-directions">
+                                Cómo llegar
+                            </a>
+                        </div>
+                    </div>
+                `;
+                marker.bindPopup(popupContent);
+
+                markers.push(marker);
+
+                const negocioItem = document.createElement('div');
+                negocioItem.className = 'negocio-item';
+                negocioItem.setAttribute('data-id', negocio.id);
+                negocioItem.innerHTML = `
+                    <span class="negocio-category cat-${negocio.category}">
                         ${negocio.icon || categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
                     </span>
-                    <h3>${negocio.name}</h3>
-                    <p><strong>📍</strong> ${negocio.address}</p>
-                    <p><strong>⏰</strong> ${negocio.hours}</p>
-                    <div class="popup-actions">
+                    <div class="negocio-name">${negocio.name}</div>
+                    <div class="negocio-description">${negocio.description}</div>
+                    <div class="negocio-info">
+                        <span>📍 ${negocio.address}</span>
+                        <span>⏰ ${negocio.hours}</span>
+                        <span>📱 ${negocio.phone}</span>
+                    </div>
+                    <div class="negocio-actions">
                         <a href="https://wa.me/${negocio.phone.replace(/\s+/g, '')}" target="_blank" class="action-btn btn-whatsapp">
                             WhatsApp
                         </a>
@@ -884,90 +1555,94 @@
                             Cómo llegar
                         </a>
                     </div>
-                </div>
-            `;
-            marker.bindPopup(popupContent);
+                `;
 
-            markers.push(marker);
-
-            const negocioItem = document.createElement('div');
-            negocioItem.className = 'negocio-item';
-            negocioItem.setAttribute('data-id', negocio.id);
-            negocioItem.innerHTML = `
-                <span class="negocio-category cat-${negocio.category}">
-                    ${negocio.icon || categoryIcons[negocio.category]} ${negocio.category.toUpperCase()}
-                </span>
-                <div class="negocio-name">${negocio.name}</div>
-                <div class="negocio-description">${negocio.description}</div>
-                <div class="negocio-info">
-                    <span>📍 ${negocio.address}</span>
-                    <span>⏰ ${negocio.hours}</span>
-                    <span>📱 ${negocio.phone}</span>
-                </div>
-                <div class="negocio-actions">
-                    <a href="https://wa.me/${negocio.phone.replace(/\s+/g, '')}" target="_blank" class="action-btn btn-whatsapp">
-                        WhatsApp
-                    </a>
-                    <a href="https://www.google.com/maps?q=${negocio.lat},${negocio.lng}" target="_blank" class="action-btn btn-directions">
-                        Cómo llegar
-                    </a>
-                </div>
-            `;
-
-            negocioItem.addEventListener('click', () => {
-                document.querySelectorAll('.negocio-item').forEach(item => {
-                    item.classList.remove('active');
+                negocioItem.addEventListener('click', () => {
+                    document.querySelectorAll('.negocio-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    negocioItem.classList.add('active');
+                    
+                    if (isMapLocked) {
+                        unlockMap();
+                    }
+                    
+                    map.setView([negocio.lat, negocio.lng], 17);
+                    marker.openPopup();
                 });
-                negocioItem.classList.add('active');
-                
-                // Desbloquear el mapa si está bloqueado
-                if (isMapLocked) {
-                    unlockMap();
-                }
-                
-                map.setView([negocio.lat, negocio.lng], 17);
-                marker.openPopup();
+
+                negociosList.appendChild(negocioItem);
             });
 
-            negociosList.appendChild(negocioItem);
-        });
-
-        if (markers.length > 0) {
-            const group = new L.featureGroup(markers);
-            map.fitBounds(group.getBounds().pad(0.1));
-        }
-    }
-
-    // Función para filtrar por categoría
-    function filterByCategory(category) {
-        currentFilter = category;
-        
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.classList.remove('active');
-            if (btn.getAttribute('data-category') === category) {
-                btn.classList.add('active');
+            if (markers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.1));
             }
+        }
+
+        function filterByCategory(category) {
+            currentFilter = category;
+            currentSubcategory = null;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.subcategory-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            loadNegocios();
+        }
+
+        function filterBySubcategory(category, subcategory) {
+            currentFilter = category;
+            currentSubcategory = subcategory;
+            
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.getAttribute('data-category') === category) {
+                    btn.classList.add('active');
+                }
+            });
+
+            document.querySelectorAll('.subcategory-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            event.target.classList.add('active');
+
+            loadNegocios();
+        }
+
+        function toggleSubcategories(button) {
+            if (window.innerWidth <= 968) {
+                const parent = button.closest('.category-filter-item');
+                parent.classList.toggle('show-subcategories');
+            } else {
+                const category = button.getAttribute('data-category');
+                filterByCategory(category);
+            }
+        }
+
+        document.getElementById('searchNegocios').addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.negocio-item');
+            
+            items.forEach(item => {
+                const text = item.textContent.toLowerCase();
+                if (text.includes(searchTerm)) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
         });
 
         loadNegocios();
-    }
-
-    // Búsqueda de negocios
-    document.getElementById('searchNegocios').addEventListener('input', (e) => {
-        const searchTerm = e.target.value.toLowerCase();
-        const items = document.querySelectorAll('.negocio-item');
-        
-        items.forEach(item => {
-            const text = item.textContent.toLowerCase();
-            if (text.includes(searchTerm)) {
-                item.style.display = 'block';
-            } else {
-                item.style.display = 'none';
-            }
-        });
-    });
-
-    loadNegocios();
     </script>
 </body>
 </html>
