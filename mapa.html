@@ -841,16 +841,20 @@
             .map-container-wrapper {
                 grid-template-columns: 1fr;
                 height: auto;
+                display: flex;
+                flex-direction: column;
             }
 
             .negocios-sidebar {
                 height: 400px;
                 border-right: none;
-                border-bottom: 2px solid #9ca3af;
+                border-top: 2px solid #9ca3af;
+                order: 2;
             }
 
             #map {
                 height: 500px;
+                order: 1;
             }
 
             .negocios-header h1 {
@@ -1309,7 +1313,7 @@
             {
                 id: 2,
                 name: "Acuario sayumi",
-                category: "servicios",
+                category: "tiendas",
                 subcategory: null,
                 description: "Realizamos instalaciones de peceras al gusto del cliente y tenemos variedad de peces ornamentales",
                 address: "Ernesto Morales con Jorge Anccasi",
@@ -1619,11 +1623,22 @@
         }
 
         function toggleSubcategories(button) {
+            const category = button.getAttribute('data-category');
+            
             if (window.innerWidth <= 968) {
                 const parent = button.closest('.category-filter-item');
-                parent.classList.toggle('show-subcategories');
+                const wasOpen = parent.classList.contains('show-subcategories');
+                
+                document.querySelectorAll('.category-filter-item').forEach(item => {
+                    item.classList.remove('show-subcategories');
+                });
+                
+                if (!wasOpen) {
+                    parent.classList.add('show-subcategories');
+                }
+                
+                filterByCategory(category);
             } else {
-                const category = button.getAttribute('data-category');
                 filterByCategory(category);
             }
         }
